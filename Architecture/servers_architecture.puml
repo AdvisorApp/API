@@ -1,0 +1,36 @@
+@startuml
+
+title "AdvisorAPP Architecture"
+
+cloud "Server - API" as API {
+    node "front-server" {
+        [ApacheTomcat] as Tomcat
+    }
+
+    node "engine" {
+        [JDK8] as Java
+    }
+
+    node "Database" {
+        database "AdvisorApp" as StandardDB
+    }
+
+    node "Sources" {
+        [CodeSource]
+    }
+}
+
+
+Java --> Tomcat
+Tomcat --> CodeSource
+StandardDB --> CodeSource
+Java --> CodeSource
+
+
+cloud "Users" {
+    node "IOS"
+    node "Android"
+}
+API --> IOS
+API --> Android
+@enduml

@@ -1,0 +1,41 @@
+@startuml
+
+title "AdvisorAPP Architecture"
+
+object users {
+}
+
+object uv_user {
+}
+
+object uvs {
+}
+
+object study_plans {
+}
+
+object options {
+}
+
+object semesters {
+}
+
+object carts {
+}
+
+object uv_types {
+}
+
+uvs "1" -- "*" uv_user
+users "0,1" -- "*" study_plans
+study_plans "*" -- "0,1" options
+options "0,1" -- "*" uvs
+study_plans "*" -- "*" semesters
+semesters "*" -- "*" uvs
+carts "0,1" -- "*" semesters
+carts "*" -- "*" uvs
+uvs "*" -- "*" uvs : corequisites
+uvs "*" -- "*" uvs : prerequisites
+uvs "*" -- "1" uv_types
+
+@enduml
