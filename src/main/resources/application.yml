@@ -7,12 +7,12 @@ spring.jmx:
 
 spring.datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1/bootexample
+    url: jdbc:mysql://127.0.0.1/advisorapp
     username: root
-    password: root
+    password: null
 
 spring.jpa.properties.hibernate.dialect: org.hibernate.dialect.MySQL5Dialect
-spring.jpa.hibernate.ddl-auto: update
+spring.jpa.hibernate.ddl-auto: create-drop
 
 server:
   port: 8090
