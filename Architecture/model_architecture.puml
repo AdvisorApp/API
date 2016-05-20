@@ -3,75 +3,39 @@
 title "AdvisorAPP Architecture"
 
 object users {
-id
-name
-lastname
-birthday
-student_id
 }
 
 object uv_user {
-    user_average
-    uv_mark
-    uv_comment
 }
 
 object uvs {
-id
-name
-description
-
-chs
 }
 
 object study_plans {
-id
-
 }
 
 object options {
 }
 
 object semesters {
-    id
 }
 
 object carts {
 }
 
-object uv_prerequisites {
-}
-
-object uv_corequisites {
-}
-
 object uv_types {
-id
-type
-hoursByCredit
 }
 
-object blabla {
-}
-
-uvs "1" -- "*" uv_prerequisites : uv_parent
-uvs "1" -- "*" uv_prerequisites : uv_child
-
-uvs "1" -- "*" uv_corequisites : uv1
-uvs "1" -- "*" uv_corequisites : uv2
-
-
-uv_user "*" -- "1" users : user
-uv_user  "*" -- "1" uvs : uv
-
+uvs "1" -- "*" uv_user
 users "0,1" -- "*" study_plans
 study_plans "*" -- "0,1" options
 options "0,1" -- "*" uvs
-study_plans "1" -- "*" semesters
+study_plans "*" -- "*" semesters
 semesters "*" -- "*" uvs
 carts "0,1" -- "*" semesters
 carts "*" -- "*" uvs
-
-uvs "*" -- "1" uv_types : type
+uvs "*" -- "*" uvs : corequisites
+uvs "*" -- "*" uvs : prerequisites
+uvs "*" -- "1" uv_types
 
 @enduml
