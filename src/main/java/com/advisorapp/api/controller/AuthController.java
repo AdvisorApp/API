@@ -5,6 +5,7 @@ import com.advisorapp.api.model.JsonWebToken;
 import com.advisorapp.api.SecuredRequest;
 import com.advisorapp.api.exception.ResourceNotFoundException;
 import com.advisorapp.api.model.User;
+import com.advisorapp.api.exception.ResourceNotFoundException;
 import com.advisorapp.api.service.AuthenticationService;
 import com.advisorapp.api.service.UserService;
 import com.wordnik.swagger.annotations.Api;
