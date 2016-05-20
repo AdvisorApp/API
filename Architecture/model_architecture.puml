@@ -1,77 +1,74 @@
-@startuml
-
-title "AdvisorAPP Architecture"
-
 object users {
 id
 name
 lastname
 birthday
-student_id
+remoteId
 }
 
-object uv_user {
-    user_average
-    uv_mark
-    uv_comment
+object uvUser {
+    userAverage
+    uvMark
+    uvComment
+}
+
+
+enum location{
+DEPARTMENT
+FACULTY
+UNIVERSITY
 }
 
 object uvs {
 id
+remoteId
 name
 description
-
+minSemester
+isAvailableForCard
 chs
 }
 
-object study_plans {
+object studyPlans {
 id
 
 }
 
 object options {
+name
+
 }
 
 object semesters {
     id
+    number
 }
 
 object carts {
 }
 
-object uv_prerequisites {
-}
-
-object uv_corequisites {
-}
-
-object uv_types {
+object uvTypes {
 id
 type
 hoursByCredit
 }
 
-object blabla {
-}
+uvs "*" -- "*" uvs : uvCorequisite
+uvs "*" -- "*" uvs : uvPrerequisite
 
-uvs "1" -- "*" uv_prerequisites : uv_parent
-uvs "1" -- "*" uv_prerequisites : uv_child
+uvUser "*" -- "1" users : user
+uvUser  "*" -- "1" uvs : uv
 
-uvs "1" -- "*" uv_corequisites : uv1
-uvs "1" -- "*" uv_corequisites : uv2
-
-
-uv_user "*" -- "1" users : user
-uv_user  "*" -- "1" uvs : uv
-
-users "0,1" -- "*" study_plans
-study_plans "*" -- "0,1" options
-options "0,1" -- "*" uvs
-study_plans "1" -- "*" semesters
+users "0,1" -- "*" studyPlans
+studyPlans "*" -- "0,1" options
+options "0,1" -- "*" uvs : option
+studyPlans "1" -- "*" semesters
 semesters "*" -- "*" uvs
 carts "0,1" -- "*" semesters
 carts "*" -- "*" uvs
 
-uvs "*" -- "1" uv_types : type
+uvs "*" -- "1" uvTypes : type
+
+uvs "*" -- "1" location : location
 
 @enduml
