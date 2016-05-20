@@ -9,6 +9,7 @@ import org.springframework.boot.actuate.metrics.CounterService;
 import org.springframework.boot.actuate.metrics.GaugeService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import com.advisorapp.api.model.Credential;
 import org.springframework.stereotype.Service;
 
 <<<<<<< efc668c7dd7bde8971b0dd96d18322c7f1f17ac3

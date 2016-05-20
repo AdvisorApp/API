@@ -1,6 +1,6 @@
 package com.advisorapp.api.service;
 
-import com.advisorapp.api.domain.User;
+import com.advisorapp.api.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -29,7 +29,7 @@ public class AuthenticationService {
 
     public String provideToken(User user){
         return Jwts.builder()
-                .setSubject(user.getId().toString())
+                .setSubject(Long.toString(user.getId()))
                 .signWith(SignatureAlgorithm.HS512, key)
                 .compact();
     }
