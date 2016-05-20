@@ -1,6 +1,6 @@
 @startuml
 
-title "AdvisorAPP Architecture"
+title "AdvisorApp Architecture"
 
 cloud "Server - API" as API {
     node "front-server" {
