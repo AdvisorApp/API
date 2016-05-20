@@ -1,7 +1,7 @@
 package com.advisorapp.api.service;
 
-import com.advisorapp.api.domain.Hotel;
-import com.advisorapp.api.dao.jpa.HotelRepository;
+import com.advisorapp.api.model.Hotel;
+import com.advisorapp.api.dao.HotelRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

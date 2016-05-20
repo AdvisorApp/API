@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @EnableSwagger
-@ComponentScan("com.advisorapp.api.controller.rest")
+@ComponentScan("com.advisorapp.api.controller")
 public class SwaggerConfig {
 
     public static final String DEFAULT_INCLUDE_PATTERNS = "/example/.*";
