@@ -6,8 +6,8 @@ package com.advisorapp.api.test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.advisorapp.api.Application;
-import com.advisorapp.api.api.rest.HotelController;
-import com.advisorapp.api.domain.Hotel;
+import com.advisorapp.api.controller.HotelController;
+import com.advisorapp.api.model.Hotel;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

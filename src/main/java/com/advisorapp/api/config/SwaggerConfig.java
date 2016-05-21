@@ -1,4 +1,4 @@
-package com.advisorapp.api.api.rest.docs;
+package com.advisorapp.api.config;
 
 import com.mangofactory.swagger.configuration.SpringSwaggerConfig;
 import com.mangofactory.swagger.plugin.EnableSwagger;
@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @EnableSwagger
-@ComponentScan("com.advisorapp.api.api.rest")
+@ComponentScan("com.advisorapp.api.controller")
 public class SwaggerConfig {
 
     public static final String DEFAULT_INCLUDE_PATTERNS = "/example/.*";

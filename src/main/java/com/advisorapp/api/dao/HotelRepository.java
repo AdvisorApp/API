@@ -1,6 +1,6 @@
-package com.advisorapp.api.dao.jpa;
+package com.advisorapp.api.dao;
 
-import com.advisorapp.api.domain.Hotel;
+import com.advisorapp.api.model.Hotel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
