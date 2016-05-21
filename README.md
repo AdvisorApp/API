@@ -1,4 +1,4 @@
-# AdvisorApp - API
+# AdvisorApp - API [![Build Status](https://api.travis-ci.org/AdvisorApp/API.svg?branch=master)](https://travis-ci.org/AdvisorApp/API)
 
 ## Contributing
 
