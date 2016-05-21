@@ -42,6 +42,8 @@ info:
     description: ${project.description}
     version: ${project.version}
 
+privateKey: "9g4LrPHpdpcjQ33KFTHJWjAsuPGa8yaKTS8YFJLEa5tQjfdMzDrxLsDyRA7tYmbBr9E66ppbMcLQXRccq7RYVBHEm5mwDHtnSHLt"
+
 ---
 
 spring:
