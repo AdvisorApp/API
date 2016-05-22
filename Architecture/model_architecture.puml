@@ -1,3 +1,7 @@
+@startuml
+
+title "AdvisorApp Architecture"
+
 object users {
 id
 name
