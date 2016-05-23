@@ -1,6 +1,8 @@
 package com.advisorapp.api.model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
@@ -22,6 +24,7 @@ public class Semester {
 
     @ManyToOne
     @JoinColumn(name = "study_plan_id", nullable = false)
+    @JsonBackReference
     private StudyPlan studyPlan;
 
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "semesters")

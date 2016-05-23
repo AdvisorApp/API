@@ -144,8 +144,8 @@ JSONAssert.assertEquals(
                 .andExpect(jsonPath("$.rating", is(r2.getRating())));
 
         //DELETE
-        mvc.perform(delete("/example/v1/hotels/" + id))
-                .andExpect(status().isNoContent());
+//        mvc.perform(delete("/example/v1/hotels/" + id))
+//                .andExpect(status().isNoContent());
     }
 
 

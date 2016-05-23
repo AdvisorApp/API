@@ -1,11 +1,10 @@
 package com.advisorapp.api.model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
-import javax.xml.bind.annotation.*;
-import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -29,8 +28,8 @@ public class Uv {
     @Range(min = 1)
     private int minSemester;
 
-    @Column(name = "is_available_for_card",nullable = false)
-    private boolean isAvailableForCard;
+    @Column(name = "is_available_for_cart",nullable = false)
+    private boolean isAvailableForCart;
 
     @Column(nullable = false)
     @Range(min = 1)
@@ -40,6 +39,7 @@ public class Uv {
 
     @ManyToOne
     @JoinColumn(name = "uv_type_id",nullable = false)
+    @JsonBackReference
     private UvType uvType;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -107,12 +107,12 @@ public class Uv {
         this.minSemester = minSemester;
     }
 
-    public boolean isAvailableForCard() {
-        return isAvailableForCard;
+    public boolean isAvailableForCart() {
+        return isAvailableForCart;
     }
 
     public void setIsAvailableForCard(boolean isAvailableForCard) {
-        this.isAvailableForCard = isAvailableForCard;
+        this.isAvailableForCart = isAvailableForCard;
     }
 
     public double getChs() {

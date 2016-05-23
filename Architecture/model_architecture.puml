@@ -4,8 +4,9 @@ title "AdvisorApp Architecture"
 
 object users {
 id
-name
+firstname
 lastname
+email
 birthday
 remoteId
 }

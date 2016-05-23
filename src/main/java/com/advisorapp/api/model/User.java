@@ -1,6 +1,8 @@
 package com.advisorapp.api.model;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;
 import java.util.Date;
@@ -26,7 +28,11 @@ public class User {
     @Column(name = "remote_id")
     private String remoteId;
 
+    @Column
+    private String email;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private Set<StudyPlan> studyPlans;
 
 
@@ -73,5 +79,13 @@ public class User {
     public void addStudyPlan(StudyPlan studyPlan){
         this.studyPlans.add(studyPlan);
         studyPlan.setUser(this);
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

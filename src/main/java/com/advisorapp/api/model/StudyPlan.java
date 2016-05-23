@@ -1,34 +1,43 @@
 package com.advisorapp.api.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
 @Entity
 @Table(name = "study_plans")
-public class StudyPlan {
+public class StudyPlan implements Serializable{
     @Id
     @GeneratedValue
     private long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id",nullable = true)
+    @ManyToOne()
+    @JoinColumn(name = "user_id")
+    @JsonBackReference
     private User user;
 
     @Column()
     private String name;
 
     @OneToMany(mappedBy = "studyPlan", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private Set<Semester> semesters;
 
     @ManyToOne
     @JoinColumn(name = "option_id")
+    @JsonBackReference
     private Option option;
 
     public long getId() {
         return id;
     }
+
 
     public User getUser() {
         return user;
@@ -65,5 +74,16 @@ public class StudyPlan {
 
     public void setOption(Option option) {
         this.option = option;
+    }
+
+    @Override
+    public String toString() {
+        return "StudyPlan{" +
+                "id=" + id +
+                ", user=" + user +
+                ", name='" + name + '\'' +
+                ", semesters=" + semesters +
+                ", option=" + option +
+                '}';
     }
 }
