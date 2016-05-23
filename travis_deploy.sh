@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-PROJECT_VERSION=`mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpression=project.version`
+PROJECT_VERSION="0.1.0"
+#`mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpression=project.version`
 
 echo "Project version $PROJECT_VERSION"
 
