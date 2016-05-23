@@ -1,6 +1,7 @@
 package com.advisorapp.api;
 
-import com.advisorapp.api.domain.User;
+
+import com.advisorapp.api.model.User;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;

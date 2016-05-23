@@ -1,6 +1,6 @@
 package com.advisorapp.api;
 
-import com.advisorapp.api.domain.User;
+import com.advisorapp.api.model.User;
 import com.advisorapp.api.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 

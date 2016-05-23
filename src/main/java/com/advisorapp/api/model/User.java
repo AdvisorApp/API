@@ -121,12 +121,45 @@ public class User {
 
     public User setStudyPlans(Set<StudyPlan> studyPlans) {
         this.studyPlans = studyPlans;
-
         for (StudyPlan studyPlan :  studyPlans)
         {
             studyPlan.setUser(this);
         }
 
         return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        if (getId() != user.getId()) return false;
+        if (getFirstName() != null ? !getFirstName().equals(user.getFirstName()) : user.getFirstName() != null)
+            return false;
+        if (getLastName() != null ? !getLastName().equals(user.getLastName()) : user.getLastName() != null)
+            return false;
+        if (getBirthday() != null ? !getBirthday().equals(user.getBirthday()) : user.getBirthday() != null)
+            return false;
+        if (getRemoteId() != null ? !getRemoteId().equals(user.getRemoteId()) : user.getRemoteId() != null)
+            return false;
+        if (getEmail() != null ? !getEmail().equals(user.getEmail()) : user.getEmail() != null) return false;
+
+        return getStudyPlans() != null ? getStudyPlans().equals(user.getStudyPlans()) : user.getStudyPlans() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (getId() ^ (getId() >>> 32));
+        result = 31 * result + (getFirstName() != null ? getFirstName().hashCode() : 0);
+        result = 31 * result + (getLastName() != null ? getLastName().hashCode() : 0);
+        result = 31 * result + (getBirthday() != null ? getBirthday().hashCode() : 0);
+        result = 31 * result + (getRemoteId() != null ? getRemoteId().hashCode() : 0);
+        result = 31 * result + (getEmail() != null ? getEmail().hashCode() : 0);
+        result = 31 * result + (getStudyPlans() != null ? getStudyPlans().hashCode() : 0);
+
+        return result;
     }
 }
