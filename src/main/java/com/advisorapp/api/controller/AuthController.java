@@ -2,6 +2,7 @@ package com.advisorapp.api.controller;
 
 import com.advisorapp.api.model.Credential;
 import com.advisorapp.api.model.JsonWebToken;
+import com.advisorapp.api.SecuredRequest;
 import com.advisorapp.api.exception.ResourceNotFoundException;
 import com.advisorapp.api.service.AuthenticationService;
 import com.advisorapp.api.service.UserService;
@@ -44,6 +45,17 @@ public class AuthController extends AbstractRestHandler {
                 .map(JsonWebToken::new)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
+    }
+
+
+    @RequestMapping(value = "/hello",
+            method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Hello route", notes = "200 if token is correct, 401 otherwise")
+    public
+    @ResponseBody
+    String hello(SecuredRequest request, HttpServletResponse response) {
+        return "Hello ! " + request.getUser().hashCode();
     }
 
 }
