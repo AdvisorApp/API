@@ -32,6 +32,7 @@ public class SecurityFilter implements Filter {
             }
         } catch (Exception e) {
             System.err.println("SecurityFilter error : " + e.getMessage());
+            throw e;
         } finally {
             sendUnauthorizedResponse((HttpServletResponse) servletResponse);
         }
