@@ -22,8 +22,15 @@ public class AuthenticationService {
 
     private String key;
 
+    /**
+     * Default value for JWT key
+     * BAD ! Used only for tests.
+     * TODO : rethink that
+     */
+    public static final String defaultKey = "myPrivateForTest";
+
     @Autowired
-    public AuthenticationService(@Value("${privateKey}") String key) {
+    public AuthenticationService(@Value("${privateKey:" + AuthenticationService.defaultKey + "}") String key) {
         this.key = key;
     }
 
