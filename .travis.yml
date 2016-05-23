@@ -1,0 +1,11 @@
+language: java
+jdk: oraclejdk8
+cache:
+  directories:
+  - $HOME/.m2
+script: mvn clean verify
+after_success:
+  on:
+    branch: master
+    - sshpass -p $DEPLOY_PASS scp -v -P $DEPLOY_SSH_PORT "/home/travis/build/AdvisorApp/API/target/api-0.1.0.war" $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH
+    - sshpass -p $DEPLOY_PASS ssh -p $DEPLOY_SSH_PORT $DEPLOY_USER:$DEPLOY_PASS@$DEPLOY_HOST "cd $DEPLOY_PATH && nohup java -Dspring.profiles.active=production -Dspring.datasource.username=$DATABASE_USER -Dspring.datasource.password=$DATABASE_PASS -jar api-0.1.0.war > server.log &"

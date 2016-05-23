@@ -13,7 +13,7 @@ To allow the script to fill your commit message, you must use this keyword at th
 
 ###Example : 
 
-You're on a branch called : TICKET-440/new-feature or fix/TICKET-440/bug-fix
+You're on a branch called : TICKET-440/new-feature or TICKET-440/fix/bug-fix
 
     $ git commit -m "$ Update Changelog"
 

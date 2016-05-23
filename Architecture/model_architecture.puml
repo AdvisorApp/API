@@ -1,41 +1,79 @@
 @startuml
 
-title "AdvisorAPP Architecture"
+title "AdvisorApp Architecture"
 
 object users {
+id
+firstname
+lastname
+email
+birthday
+remoteId
 }
 
-object uv_user {
+object uvUser {
+id
+userAverage
+uvMark
+uvComment
+}
+
+
+enum location{
+DEPARTMENT
+FACULTY
+UNIVERSITY
 }
 
 object uvs {
+id
+remoteId
+name
+description
+minSemester
+isAvailableForCard
+chs
 }
 
-object study_plans {
+object studyPlans {
+id
+name
 }
 
 object options {
+id
+name
+
 }
 
 object semesters {
+    id
+    number
 }
 
-object carts {
+
+object uvTypes {
+id
+type
+hoursByCredit
 }
 
-object uv_types {
-}
+uvs "*" -- "*" uvs : uvCorequisite
+uvs "*" -- "*" uvs : uvPrerequisite
 
-uvs "1" -- "*" uv_user
-users "0,1" -- "*" study_plans
-study_plans "*" -- "0,1" options
-options "0,1" -- "*" uvs
-study_plans "*" -- "*" semesters
+uvUser "*" -- "1" users : user
+uvUser  "*" -- "1" uvs : uv
+
+users "0,1" -- "*" studyPlans : user
+studyPlans "*" -- "0,1" options : option
+options "0,1" -- "*" uvs : option
+studyPlans "1" -- "*" semesters : studyplan
 semesters "*" -- "*" uvs
-carts "0,1" -- "*" semesters
-carts "*" -- "*" uvs
-uvs "*" -- "*" uvs : corequisites
-uvs "*" -- "*" uvs : prerequisites
-uvs "*" -- "1" uv_types
+
+uvs "*" -- "1" uvTypes : type
+
+uvs "*" -- "1" location : location
+
+
 
 @enduml
