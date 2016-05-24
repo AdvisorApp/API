@@ -9,7 +9,7 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://127.0.0.1/advisorapp
     username: root
-    password: root
+    password: null
   jpa:
     properties.hibernate.dialect: org.hibernate.dialect.MySQL5Dialect
     hibernate.ddl-auto: update
@@ -46,17 +46,17 @@ hotel.service:
 
 ---
 
+
+spring:
+  profiles: production
+  datasource:
+    url: jdbc:mysql://127.0.0.1:1664/advisorapp
+
+
+
+---
 spring:
   profiles: test
 
 hotel.service:
   name: 'test profile:'
-
----
-
-spring:
-  profiles: production
-
-spring:
-  datasource:
-    url: jdbc:mysql://127.0.0.1:1664/advisorapp

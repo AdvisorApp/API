@@ -1,4 +1,4 @@
-package com.advisorapp.api.domain;
+package com.advisorapp.api.model;
 
 import javax.xml.bind.annotation.XmlRootElement;
 

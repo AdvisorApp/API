@@ -1,6 +1,6 @@
-package com.advisorapp.api.api.rest;
+package com.advisorapp.api.controller;
 
-import com.advisorapp.api.domain.Hotel;
+import com.advisorapp.api.model.Hotel;
 import com.advisorapp.api.exception.DataFormatException;
 import com.advisorapp.api.service.HotelService;
 import com.wordnik.swagger.annotations.Api;

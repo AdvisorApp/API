@@ -1,7 +1,8 @@
 package com.advisorapp.api.service;
 
+import com.advisorapp.api.dao.UvRepository;
 import com.advisorapp.api.model.Hotel;
-import com.advisorapp.api.dao.HotelRepository;
+import com.advisorapp.api.model.Uv;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +16,12 @@ import org.springframework.stereotype.Service;
  * Sample service to demonstrate what the API would use to get things done
  */
 @Service
-public class HotelService {
+public class UvService {
 
-    private static final Logger log = LoggerFactory.getLogger(HotelService.class);
+    private static final Logger log = LoggerFactory.getLogger(UvService.class);
 
     @Autowired
-    private HotelRepository hotelRepository;
+    private UvRepository uvRepository;
 
     @Autowired
     CounterService counterService;
@@ -28,32 +29,32 @@ public class HotelService {
     @Autowired
     GaugeService gaugeService;
 
-    public HotelService() {
+    public UvService() {
     }
 
-    public Hotel createHotel(Hotel hotel) {
-        return hotelRepository.save(hotel);
+    public Uv createUv(Uv uv) {
+        return uvRepository.save(uv);
     }
 
-    public Hotel getHotel(long id) {
-        return hotelRepository.findOne(id);
+    public Uv getUv(long id) {
+        return uvRepository.findOne(id);
     }
 
-    public void updateHotel(Hotel hotel) {
-        hotelRepository.save(hotel);
+    public void updateUv(Uv uv) {
+        uvRepository.save(uv);
     }
 
-    public void deleteHotel(Long id) {
-        hotelRepository.delete(id);
+    public void deleteUv(Long id) {
+        uvRepository.delete(id);
     }
 
     //http://goo.gl/7fxvVf
-    public Page<Hotel> getAllHotels(Integer page, Integer size) {
-        Page pageOfHotels = hotelRepository.findAll(new PageRequest(page, size));
+    public Page<Uv> getAllUvs(Integer page, Integer size) {
+        Page pageOfUvs = uvRepository.findAll(new PageRequest(page, size));
         // example of adding to the /metrics
         if (size > 50) {
-            counterService.increment("advisorapp.HotelService.getAll.largePayload");
+            counterService.increment("advisorapp.UvService.getAll.largePayload");
         }
-        return pageOfHotels;
+        return pageOfUvs;
     }
 }
