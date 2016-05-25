@@ -3,10 +3,8 @@ package com.advisorapp.api.test;
 
 import com.advisorapp.api.Application;
 import com.advisorapp.api.SecurityFilter;
-<<<<<<< 0df8f796e3005ed2dd3c284fafdc886691969b21
 import com.advisorapp.api.dao.UserRepository;
-=======
->>>>>>> [ADV-16] Create tests for auth
+import com.advisorapp.api.dao.UserRepository;
 import com.advisorapp.api.model.Credential;
 import com.advisorapp.api.model.User;
 import com.advisorapp.api.service.AuthenticationService;
@@ -17,15 +15,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-<<<<<<< 0df8f796e3005ed2dd3c284fafdc886691969b21
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-=======
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
->>>>>>> [ADV-16] Create tests for auth
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
@@ -45,10 +40,8 @@ import java.util.regex.Pattern;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertTrue;
-<<<<<<< 0df8f796e3005ed2dd3c284fafdc886691969b21
 import static org.mockito.Mockito.*;
-=======
->>>>>>> [ADV-16] Create tests for auth
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
