@@ -3,6 +3,7 @@ package com.advisorapp.api.test;
 
 import com.advisorapp.api.Application;
 import com.advisorapp.api.SecurityFilter;
+import com.advisorapp.api.dao.UserRepository;
 import com.advisorapp.api.model.Credential;
 import com.advisorapp.api.model.User;
 import com.advisorapp.api.service.AuthenticationService;
@@ -13,8 +14,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
@@ -34,6 +37,7 @@ import java.util.regex.Pattern;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -51,16 +55,25 @@ public class AuthTest extends TestHelper {
     WebApplicationContext context;
 
     @InjectMocks
-    AuthenticationService authenticationService = new AuthenticationService(AuthenticationService.defaultKey);
+    AuthenticationService authenticationService;
+
 
     private MockMvc mvc;
 
     @Before
     public void initTests() {
+        UserRepository userRepository = mock(UserRepository.class);
+
         MockitoAnnotations.initMocks(this);
+
+        ReflectionTestUtils.setField(userService, "userRepository", userRepository);
+
 
         SecurityFilter securityFilter = new SecurityFilter();
         ReflectionTestUtils.setField(securityFilter, "authenticationService", authenticationService);
+
+
+        ReflectionTestUtils.setField(authenticationService, "key", AuthenticationService.defaultKey);
         ReflectionTestUtils.setField(authenticationService, "userService", userService);
 
 
@@ -83,7 +96,6 @@ public class AuthTest extends TestHelper {
     @Test
     public void shouldGiveAJWTIfTheUserIsRegistered() throws Exception {
         User user = new User();
-        userService.createUser(user);
 
         Credential mySuperPwd = new Credential(user.getEmail(), "mySuperPwd");
 
@@ -102,7 +114,12 @@ public class AuthTest extends TestHelper {
     @Test
     public void shouldSayHello() throws Exception {
         User user = new User();
-        userService.createUser(user);
+
+        when(userService
+                .getUser(
+                        user.getId()
+                )
+        ).thenReturn(user);
 
         Credential mySuperPwd = new Credential(user.getEmail(), "mySuperPwd");
 
