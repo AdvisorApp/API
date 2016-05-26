@@ -27,7 +27,7 @@ public class User {
     @Column(name = "birthday", nullable = false)
     private Date birthday;
 
-    @Column(name = "remote_id")
+    @Column(name = "remote_id", unique = true)
     private String remoteId;
 
     @Column(name = "email", nullable = false, unique = true)
