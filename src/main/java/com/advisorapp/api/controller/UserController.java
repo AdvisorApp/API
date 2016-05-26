@@ -1,5 +1,6 @@
 package com.advisorapp.api.controller;
 
+import com.advisorapp.api.model.StudyPlan;
 import com.advisorapp.api.model.User;
 import com.advisorapp.api.exception.DataFormatException;
 import com.advisorapp.api.model.User;
@@ -10,10 +11,12 @@ import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Set;
 
 /*
  * Demonstrates how to set up RESTful API endpoints using Spring MVC
@@ -53,6 +56,8 @@ public class UserController extends AbstractRestHandler {
                             HttpServletRequest request, HttpServletResponse response) {
         return this.userService.getAllUsers(page, size);
     }
+
+
 
     @RequestMapping(value = "/{id}",
             method = RequestMethod.GET,
@@ -95,5 +100,21 @@ public class UserController extends AbstractRestHandler {
                             HttpServletResponse response) {
         checkResourceFound(this.userService.getUser(id));
         this.userService.deleteUser(id);
+    }
+
+    @RequestMapping(value = "/{id}/studyPlans",
+            method = RequestMethod.GET,
+            produces = {"application/json"})
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get a single user.", notes = "You have to provide a valid user ID.")
+    public
+    @ResponseBody
+    Set<StudyPlan> getStudPlanByUser(@ApiParam(value = "The ID of the user.", required = true)
+                 @PathVariable("id") Long id,
+                                     HttpServletRequest request, HttpServletResponse response) throws Exception {
+        User user = this.userService.getUser(id);
+        checkResourceFound(user);
+        //todo: http://goo.gl/6iNAkz
+        return user.getStudyPlans();
     }
 }

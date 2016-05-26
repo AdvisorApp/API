@@ -19,7 +19,7 @@ public class StudyPlan implements Serializable{
 
     @ManyToOne()
     @JoinColumn(name = "user_id")
-    @JsonBackReference
+    @JsonManagedReference
     private User user;
 
     @Column()
@@ -31,7 +31,6 @@ public class StudyPlan implements Serializable{
 
     @ManyToOne
     @JoinColumn(name = "option_id")
-    @JsonBackReference
     private Option option;
 
     public long getId() {
