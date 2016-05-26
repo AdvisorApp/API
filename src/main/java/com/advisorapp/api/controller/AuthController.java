@@ -4,6 +4,7 @@ import com.advisorapp.api.model.Credential;
 import com.advisorapp.api.model.JsonWebToken;
 import com.advisorapp.api.SecuredRequest;
 import com.advisorapp.api.exception.ResourceNotFoundException;
+import com.advisorapp.api.model.User;
 import com.advisorapp.api.service.AuthenticationService;
 import com.advisorapp.api.service.UserService;
 import com.wordnik.swagger.annotations.Api;
@@ -56,6 +57,18 @@ public class AuthController extends AbstractRestHandler {
     @ResponseBody
     String hello(SecuredRequest request, HttpServletResponse response) {
         return "Hello ! " + request.getUser().hashCode();
+    }
+
+
+    @RequestMapping(value = "/signup",
+            method = RequestMethod.POST,
+            consumes = "application/json")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "SignUp", notes = "Sign Up a user")
+    public void signUp(@RequestBody User user,
+                HttpServletRequest request, HttpServletResponse response) {
+        userService.signUp(user);
+
     }
 
 }

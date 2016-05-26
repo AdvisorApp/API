@@ -41,6 +41,11 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public User signUp(User user) {
+        user.setPassword(authenticationService.hashPassword(user.getPassword()));
+        return userRepository.save(user);
+    }
+
     public User getUser(long id) {
         User one = userRepository.findOne(id);
         // This is important to prevent passwords to leave server

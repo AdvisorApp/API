@@ -8,7 +8,9 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Created by damien on 20/05/2016.
@@ -18,11 +20,21 @@ public class SecurityFilter implements Filter {
     @Autowired
     private AuthenticationService authenticationService;
 
+    private final String HEADER_NAME = "X-Authorization";
+
+
+    private Set<String> authorizedRoutes = new HashSet<>();
+
+    public SecurityFilter() {
+        authorizedRoutes.add("/api/auths/token");
+        authorizedRoutes.add("/api/auths/signup");
+    }
+
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         try {
             HttpServletRequest request = (HttpServletRequest) servletRequest;
-            if(isGetTokenRequest(request)) {
+            if(shouldIFilter(request)) {
                 filterChain.doFilter(
                         servletRequest,
                         servletResponse
@@ -39,7 +51,7 @@ public class SecurityFilter implements Filter {
     }
 
     private void processTokenCheck(ServletResponse servletResponse, FilterChain filterChain, HttpServletRequest request) throws IOException, ServletException {
-        String token = request.getHeader("X-Authorization");
+        String token = request.getHeader(HEADER_NAME);
         if (token != null) {
             Optional<User> userOpt = authenticationService.verifyToken(token);
             if(userOpt.isPresent()){
@@ -51,8 +63,8 @@ public class SecurityFilter implements Filter {
         }
     }
 
-    private boolean isGetTokenRequest(HttpServletRequest request) {
-        return "/api/auths/token".equals(request.getServletPath());
+    private boolean shouldIFilter(HttpServletRequest request) {
+        return authorizedRoutes.contains(request.getServletPath());
     }
 
 
