@@ -74,6 +74,7 @@ public class AuthTest extends TestHelper {
 
 
         ReflectionTestUtils.setField(authenticationService, "key", AuthenticationService.defaultKey);
+        ReflectionTestUtils.setField(authenticationService, "salt", AuthenticationService.defaultSalt);
         ReflectionTestUtils.setField(authenticationService, "userService", userService);
 
 

@@ -31,6 +31,9 @@ public class UserService {
     @Autowired
     GaugeService gaugeService;
 
+    @Autowired
+    AuthenticationService authenticationService;
+
     public UserService() {
     }
 
@@ -65,7 +68,12 @@ public class UserService {
     }
 
     public Optional<User> fetchByCredentials(Credential credential) {
-        return Optional.of(new User());
+        return Optional.ofNullable(
+                userRepository.findUserByEmailAndPassword(
+                        credential.getEmail(),
+                        authenticationService.hashPassword(credential.getPassword())
+                )
+        );
     }
 
 }
