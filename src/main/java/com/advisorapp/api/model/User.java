@@ -25,14 +25,14 @@ public class User {
     @Column(name = "birthday", nullable = false)
     private Date birthday;
 
-    @Column(name = "remote_id")
+    @Column(name = "remote_id", unique = true)
     private String remoteId;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false, unique = true)
     @Email()
     private String email;
 
-    @Column(name = "password",nullable = false, length = 60)
+    @Column(name = "password", nullable = false, length = 60)
     private String password;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
