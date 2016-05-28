@@ -1,13 +1,12 @@
 package com.advisorapp.api.controller;
 
-import com.advisorapp.api.model.StudyPlan;
-import com.advisorapp.api.model.User;
+import com.advisorapp.api.model.*;
 import com.advisorapp.api.exception.DataFormatException;
 import com.advisorapp.api.model.User;
-import com.advisorapp.api.model.Uv;
 import com.advisorapp.api.service.StudyPlanService;
 import com.advisorapp.api.service.UserService;
 import com.advisorapp.api.service.UvService;
+import com.advisorapp.api.service.UvUserService;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -38,6 +37,9 @@ public class UserController extends AbstractRestHandler {
 
     @Autowired
     private UvService uvService;
+
+    @Autowired
+    private UvUserService uvUserService;
 
     @RequestMapping(value = "",
             method = RequestMethod.POST,
@@ -145,5 +147,23 @@ public class UserController extends AbstractRestHandler {
         StudyPlan createdStudyPlan = this.studyPlanService.createStudyPlan(studyPlan);
         return createdStudyPlan;
     }
-    
+
+    // ----- User's UvUser requests handler
+
+    @RequestMapping(value = "/{id}/uvUsers",
+            method = RequestMethod.GET,
+            produces = {"application/json"})
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get user's uvUsers.", notes = "You have to provide a valid user ID.")
+    public
+    @ResponseBody
+    Set<UvUser> getUvUserByUser(@ApiParam(value = "The ID of the user.", required = true)
+                                      @PathVariable("id") Long id,
+                                   HttpServletRequest request, HttpServletResponse response) throws Exception {
+        User user = this.userService.getUser(id);
+        checkResourceFound(user);
+
+        return uvUserService.getUvUserByUser(user);
+    }
+
 }
