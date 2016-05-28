@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -28,6 +30,10 @@ public class StudyPlan implements Serializable {
     @JoinColumn(name = "option_id")
     private Option option;
 
+    public StudyPlan() {
+        this.semesters = new HashSet<>();
+    }
+
     public long getId() {
         return id;
     }
@@ -37,37 +43,49 @@ public class StudyPlan implements Serializable {
         return user;
     }
 
-    public void setUser(User user) {
+    public StudyPlan setUser(User user) {
         this.user = user;
+
+        return this;
+
+
     }
 
-    public void addSemester(Semester semester){
+    public StudyPlan addSemester(Semester semester){
         this.semesters.add(semester);
         semester.setStudyPlan(this);
+
+        return this;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public StudyPlan setName(String name) {
         this.name = name;
+
+        return this;
     }
 
     public Set<Semester> getSemesters() {
         return semesters;
     }
 
-    public void setSemesters(Set<Semester> semesters) {
+    public StudyPlan setSemesters(Set<Semester> semesters) {
         this.semesters = semesters;
+
+        return this;
     }
 
     public Option getOption() {
         return option;
     }
 
-    public void setOption(Option option) {
+    public StudyPlan setOption(Option option) {
         this.option = option;
+
+        return this;
     }
 
     @Override

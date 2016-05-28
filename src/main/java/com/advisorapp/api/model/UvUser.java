@@ -34,6 +34,7 @@ public class UvUser {
     @Column(name = "uv_comment")
     private String uvComment;
 
+
     public long getId() {
         return id;
     }
@@ -42,39 +43,49 @@ public class UvUser {
         return user;
     }
 
-    public void setUser(User user) {
+    public UvUser setUser(User user) {
         this.user = user;
+
+        return this;
     }
 
     public Uv getUv() {
         return uv;
     }
 
-    public void setUv(Uv uv) {
+    public UvUser setUv(Uv uv) {
         this.uv = uv;
+
+        return this;
     }
 
     public double getUserAverage() {
         return userAverage;
     }
 
-    public void setUserAverage(double userAverage) {
+    public UvUser setUserAverage(double userAverage) {
         this.userAverage = userAverage;
+
+        return this;
     }
 
     public double getUvMark() {
         return uvMark;
     }
 
-    public void setUvMark(double uvMark) {
+    public UvUser setUvMark(double uvMark) {
         this.uvMark = uvMark;
+
+        return this;
     }
 
     public String getUvComment() {
         return uvComment;
     }
 
-    public void setUvComment(String uvComment) {
+    public UvUser setUvComment(String uvComment) {
         this.uvComment = uvComment;
+
+        return this;
     }
 }

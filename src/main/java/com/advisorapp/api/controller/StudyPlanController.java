@@ -118,9 +118,7 @@ public class StudyPlanController extends AbstractRestHandler {
                                             HttpServletRequest request, HttpServletResponse response) throws Exception {
         StudyPlan attachedSP = this.studyPlanService.getStudyPlan(id);
         checkResourceFound(attachedSP);
-        int semesterNumber = attachedSP.getSemesters().size() + 1;
         semester.setStudyPlan(attachedSP);
-        semester.setNumber(semesterNumber);
         Semester createdSemester = this.semesterService.createSemester(semester);
         return createdSemester;
     }
