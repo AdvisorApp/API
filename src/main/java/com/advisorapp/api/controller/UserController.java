@@ -4,6 +4,7 @@ import com.advisorapp.api.model.StudyPlan;
 import com.advisorapp.api.model.User;
 import com.advisorapp.api.exception.DataFormatException;
 import com.advisorapp.api.model.User;
+import com.advisorapp.api.service.StudyPlanService;
 import com.advisorapp.api.service.UserService;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -29,6 +30,9 @@ public class UserController extends AbstractRestHandler {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private StudyPlanService studyPlanService;
 
     @RequestMapping(value = "",
             method = RequestMethod.POST,
@@ -102,19 +106,38 @@ public class UserController extends AbstractRestHandler {
         this.userService.deleteUser(id);
     }
 
+
+    // ----- User's study plan requests handler
+
     @RequestMapping(value = "/{id}/studyPlans",
             method = RequestMethod.GET,
             produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Get a single user.", notes = "You have to provide a valid user ID.")
+    @ApiOperation(value = "Get user's study plan.", notes = "You have to provide a valid user ID.")
     public
     @ResponseBody
-    Set<StudyPlan> getStudPlanByUser(@ApiParam(value = "The ID of the user.", required = true)
-                 @PathVariable("id") Long id,
-                                     HttpServletRequest request, HttpServletResponse response) throws Exception {
+    Set<StudyPlan> getStudyPlanByUser(@ApiParam(value = "The ID of the user.", required = true)
+                                      @PathVariable("id") Long id,
+                                      HttpServletRequest request, HttpServletResponse response) throws Exception {
         User user = this.userService.getUser(id);
         checkResourceFound(user);
-        //todo: http://goo.gl/6iNAkz
         return user.getStudyPlans();
+    }
+
+    @RequestMapping(value = "/{id}/studyPlans",
+            method = RequestMethod.POST,
+            consumes = "application/json",
+            produces = "application/json")
+    @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation(value = "Create a study plan for a user.", notes = "Returns the URL of the new resource in the Location header.")
+    public StudyPlan createStudyPlanForUser(@ApiParam(value = "The ID of the user.", required = true)
+                                            @PathVariable("id") Long id,
+                                            @RequestBody StudyPlan studyPlan,
+                                            HttpServletRequest request, HttpServletResponse response) throws Exception {
+        User attachedUser = this.userService.getUser(id);
+        checkResourceFound(attachedUser);
+        studyPlan.setUser(attachedUser);
+        StudyPlan createdStudyPlan = this.studyPlanService.createStudyPlan(studyPlan);
+        return createdStudyPlan;
     }
 }

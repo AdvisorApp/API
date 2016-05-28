@@ -24,10 +24,10 @@ public class Semester {
 
     @ManyToOne
     @JoinColumn(name = "study_plan_id", nullable = false)
-    @JsonBackReference
     private StudyPlan studyPlan;
 
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "semesters")
+    @JsonBackReference
     private Set<Uv> uvs;
 
     public Set<Uv> getUvs() {
