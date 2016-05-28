@@ -4,10 +4,12 @@ package com.advisorapp.api.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.hibernate.validator.constraints.Email;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -18,19 +20,20 @@ public class User {
     @GeneratedValue
     private long id;
 
-    @Column(name = "first_name")
+    @Column(name = "first_name", nullable = false)
     private String firstName;
 
-    @Column(name = "last_name")
+    @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Column()
+    @Column(name = "birthday", nullable = false)
     private Date birthday;
 
     @Column(name = "remote_id")
     private String remoteId;
 
-    @Column
+    @Column(name = "email", nullable = false)
+    @Email()
     private String email;
 
     @Column(name = "password",nullable = false, length = 60)
@@ -40,6 +43,10 @@ public class User {
     @JsonIgnore
     private Set<StudyPlan> studyPlans;
 
+    public User()
+    {
+        this.studyPlans = new HashSet<>();
+    }
 
     public long getId() {
         return id;
@@ -49,60 +56,81 @@ public class User {
         return firstName;
     }
 
-    public void setFirstName(String firstName) {
+    public User setFirstName(String firstName) {
         this.firstName = firstName;
+
+        return this;
     }
 
     public String getLastName() {
         return lastName;
     }
 
-    public void setLastName(String lastName) {
+    public User setLastName(String lastName) {
         this.lastName = lastName;
+
+        return this;
     }
 
     public Date getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(Date birthday) {
+    public User setBirthday(Date birthday) {
         this.birthday = birthday;
+
+        return this;
     }
 
     public String getRemoteId() {
         return remoteId;
     }
 
-    public void setRemoteId(String remoteId) {
+    public User setRemoteId(String remoteId) {
         this.remoteId = remoteId;
+
+        return this;
     }
 
     public Set<StudyPlan> getStudyPlans() {
         return studyPlans;
     }
 
-    public void addStudyPlan(StudyPlan studyPlan){
+    public User addStudyPlan(StudyPlan studyPlan){
         this.studyPlans.add(studyPlan);
         studyPlan.setUser(this);
+
+        return this;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
+    public User setEmail(String email) {
         this.email = email;
+
+        return this;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
+    public User setPassword(String password) {
         this.password = password;
+
+        return this;
     }
 
-    public void setStudyPlans(Set<StudyPlan> studyPlans) {
+    public User setStudyPlans(Set<StudyPlan> studyPlans) {
         this.studyPlans = studyPlans;
+
+        for (StudyPlan studyPlan :  studyPlans)
+        {
+            studyPlan.setUser(this);
+        }
+
+        return this;
     }
 }

@@ -26,9 +26,12 @@ public class Semester {
     @JoinColumn(name = "study_plan_id", nullable = false)
     private StudyPlan studyPlan;
 
-    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "semesters")
-    @JsonBackReference
-    private Set<Uv> uvs;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(
+        name = "uv_semester",
+        joinColumns = {@JoinColumn(name = "semester_id",nullable = false) },
+        inverseJoinColumns = { @JoinColumn(name = "uv_id", nullable = false)}
+    ) private Set<Uv> uvs;
 
     public Set<Uv> getUvs() {
         return this.uvs;
@@ -42,24 +45,45 @@ public class Semester {
         return number;
     }
 
-    public void setNumber(int number) {
+    private Semester setNumber(int number) {
         this.number = number;
+
+        return this;
     }
 
     public StudyPlan getStudyPlan() {
         return studyPlan;
     }
 
-    public void setStudyPlan(StudyPlan studyPlan) {
+    public Semester setStudyPlan(StudyPlan studyPlan) {
         this.studyPlan = studyPlan;
+        this.setNumber(studyPlan.getSemesters().size() + 1);
+        studyPlan.addSemester(this);
+
+        return this;
     }
 
-    public void addUv(Uv uv){
+
+    public Semester addUv(Uv uv){
         this.uvs.add(uv);
         uv.addSemester(this);
+
+        return this;
     }
 
-    public void setUvs(Set<Uv> uvs) {
+    public Semester setUvs(Set<Uv> uvs) {
         this.uvs = uvs;
+
+        for (Uv uv : uvs)
+        {
+            uv.addSemester(this);
+        }
+
+        return this;
+    }
+
+    public String toString()
+    {
+        return "Semester " + number;
     }
 }

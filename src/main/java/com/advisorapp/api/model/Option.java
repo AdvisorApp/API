@@ -25,9 +25,10 @@ public class Option {
         return name;
     }
 
-    public void setName(String name) {
+    public Option setName(String name) {
         this.name = name;
-    }
 
+        return this;
+    }
 
 }
