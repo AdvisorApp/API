@@ -16,7 +16,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @EnableAutoConfiguration  // Sprint Boot Auto Configuration
 @ComponentScan(basePackages = "com.advisorapp.api")
-@EnableJpaRepositories("com.advisorapp.api.dao.jpa") // To segregate MongoDB and JPA repositories. Otherwise not needed.
+@EnableJpaRepositories("com.advisorapp.api.dao") // To segregate MongoDB and JPA repositories. Otherwise not needed.
 @EnableSwagger // auto generation of API docs
 public class Application extends SpringBootServletInitializer {
 
