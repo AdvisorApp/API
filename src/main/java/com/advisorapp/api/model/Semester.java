@@ -2,6 +2,7 @@ package com.advisorapp.api.model;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.validator.constraints.Range;
 
@@ -31,7 +32,9 @@ public class Semester {
         name = "uv_semester",
         joinColumns = {@JoinColumn(name = "semester_id",nullable = false) },
         inverseJoinColumns = { @JoinColumn(name = "uv_id", nullable = false)}
-    ) private Set<Uv> uvs;
+    )
+    @JsonIgnore
+    private Set<Uv> uvs;
 
     public Set<Uv> getUvs() {
         return this.uvs;
@@ -58,8 +61,6 @@ public class Semester {
     public Semester setStudyPlan(StudyPlan studyPlan) {
         this.studyPlan = studyPlan;
         this.setNumber(studyPlan.getSemesters().size() + 1);
-        studyPlan.addSemester(this);
-
         return this;
     }
 

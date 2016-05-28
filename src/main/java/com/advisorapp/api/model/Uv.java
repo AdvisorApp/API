@@ -2,6 +2,7 @@ package com.advisorapp.api.model;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.validator.constraints.Range;
 
@@ -59,7 +60,7 @@ public class Uv {
     @JsonBackReference
     private Set<Uv> corequisitesUv;
 
-    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "corequisiteUv")
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "corequisitesUv")
     @JsonManagedReference
     private Set<Uv> corequisitesUvOf;
 

@@ -124,7 +124,6 @@ public class StudyPlanController extends AbstractRestHandler {
         checkResourceFound(attachedSP);
         int semesterNumber = attachedSP.getSemesters().size() + 1;
         semester.setStudyPlan(attachedSP);
-        semester.setNumber(semesterNumber);
         Semester createdSemester = this.semesterService.createSemester(semester);
         return createdSemester;
     }
