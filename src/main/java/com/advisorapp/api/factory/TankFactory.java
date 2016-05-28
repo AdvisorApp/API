@@ -5,22 +5,26 @@ import com.advisorapp.api.model.User;
 import com.advisorapp.api.model.UvUser;
 import com.advisorapp.api.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.Set;
 
+@Service
 public class TankFactory {
     @Autowired
-    private UserFactory userFactory;
+    private OptionFactory optionFactory;
 
     @Autowired
-    private OptionFactory optionFactory;
+    private SemesterFactory semesterFactory;
 
     @Autowired
     private StudyPlanFactory studyPlanFactory;
 
     @Autowired
-    private SemesterFactory semesterFactory;
+    private UserFactory userFactory;
 
     @Autowired
     private UvFactory uvFactory;
@@ -29,7 +33,7 @@ public class TankFactory {
     private UvTypeFactory uvTypeFactory;
 
     @Autowired
-    private UvUser uvUser;
+    private UvUserFactory uvUserFactory;
 
     public UserFactory getUserFactory() {
         return userFactory;
@@ -55,7 +59,7 @@ public class TankFactory {
         return uvTypeFactory;
     }
 
-    public UvUser getUvUser() {
-        return uvUser;
+    public UvUserFactory getUvUserFactory() {
+        return uvUserFactory;
     }
 }

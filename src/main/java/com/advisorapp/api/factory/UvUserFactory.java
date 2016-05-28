@@ -5,7 +5,10 @@ import com.advisorapp.api.model.Uv;
 import com.advisorapp.api.model.UvUser;
 import com.advisorapp.api.service.UvUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
+@Service
 public class UvUserFactory {
     @Autowired
     private UvUserService uvUserService;

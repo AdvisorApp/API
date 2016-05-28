@@ -10,10 +10,10 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://127.0.0.1/advisorapp
     username: root
-    password: null
+    password: root
   jpa:
     properties.hibernate.dialect: org.hibernate.dialect.MySQL5Dialect
-    hibernate.ddl-auto: update
+    hibernate.ddl-auto: create-drop
 
 server:
   port: 8090

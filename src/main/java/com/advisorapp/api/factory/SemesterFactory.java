@@ -5,9 +5,12 @@ import com.advisorapp.api.model.StudyPlan;
 import com.advisorapp.api.model.Uv;
 import com.advisorapp.api.service.SemesterService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.Set;
 
+@Service
 public class SemesterFactory {
     @Autowired
     private SemesterService semesterService;
