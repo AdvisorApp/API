@@ -28,18 +28,6 @@ public class SemesterController extends AbstractRestHandler {
     private SemesterService semesterService;
 
     @RequestMapping(value = "",
-            method = RequestMethod.POST,
-            consumes = "application/json",
-            produces = "application/json")
-    @ResponseStatus(HttpStatus.CREATED)
-    @ApiOperation(value = "Create an semester resource.", notes = "Returns the URL of the new resource in the Location header.")
-    public void createSemester(@RequestBody Semester semester,
-                           HttpServletRequest request, HttpServletResponse response) {
-        Semester createdSemester = this.semesterService.createSemester(semester);
-        response.setHeader("Location", request.getRequestURL().append("/").append(createdSemester.getId()).toString());
-    }
-
-    @RequestMapping(value = "",
             method = RequestMethod.GET,
             produces = "application/json")
     @ResponseStatus(HttpStatus.OK)

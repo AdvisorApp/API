@@ -1,8 +1,10 @@
 package com.advisorapp.api.controller;
 
+import com.advisorapp.api.model.Semester;
 import com.advisorapp.api.model.StudyPlan;
 import com.advisorapp.api.exception.DataFormatException;
 import com.advisorapp.api.model.StudyPlan;
+import com.advisorapp.api.service.SemesterService;
 import com.advisorapp.api.service.StudyPlanService;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -16,6 +18,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Set;
 
 /*
  * Demonstrates how to set up RESTful API endpoints using Spring MVC
@@ -29,19 +32,8 @@ public class StudyPlanController extends AbstractRestHandler {
     @Autowired
     private StudyPlanService studyPlanService;
 
-    @RequestMapping(value = "",
-            method = RequestMethod.POST,
-            consumes = "application/json",
-            produces = "application/json")
-    @ResponseStatus(HttpStatus.CREATED)
-    @ApiOperation(value = "Create an studyPlan resource.", notes = "Returns the URL of the new resource in the Location header.")
-    public void createStudyPlan(@RequestBody StudyPlan studyPlan,
-                           HttpServletRequest request, HttpServletResponse response) {
-        StudyPlan createdStudyPlan = this.studyPlanService.createStudyPlan(studyPlan);
-            System.out.println("DEBUG request: " + request.toString());
-        System.out.println("DEBUG studyPlan: " + studyPlan.toString());
-        response.setHeader("Location", request.getRequestURL().append("/").append(createdStudyPlan.getId()).toString());
-    }
+    @Autowired
+    private SemesterService semesterService;
 
     @RequestMapping(value = "",
             method = RequestMethod.GET,
@@ -99,5 +91,41 @@ public class StudyPlanController extends AbstractRestHandler {
                            HttpServletResponse response) {
         checkResourceFound(this.studyPlanService.getStudyPlan(id));
         this.studyPlanService.deleteStudyPlan(id);
+    }
+
+    // ----- SP's semester requests handler
+
+    @RequestMapping(value = "/{id}/semesters",
+            method = RequestMethod.GET,
+            produces = {"application/json"})
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get SP's semesters.", notes = "You have to provide a valid SP ID.")
+    public
+    @ResponseBody
+    Set<Semester> getSemesterBySP(@ApiParam(value = "The ID of the SP.", required = true)
+                                      @PathVariable("id") Long id,
+                                  HttpServletRequest request, HttpServletResponse response) throws Exception {
+        StudyPlan studyPlan = this.studyPlanService.getStudyPlan(id);
+        checkResourceFound(studyPlan);
+        return studyPlan.getSemesters();
+    }
+
+    @RequestMapping(value = "/{id}/semesters",
+            method = RequestMethod.POST,
+            consumes = "application/json",
+            produces = "application/json")
+    @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation(value = "Create a semester for a SP.", notes = "Returns the URL of the new resource in the Location header.")
+    public Semester createSemesterForSP(@ApiParam(value = "The ID of the SP.", required = true)
+                                            @PathVariable("id") Long id,
+                                            @RequestBody Semester semester,
+                                            HttpServletRequest request, HttpServletResponse response) throws Exception {
+        StudyPlan attachedSP = this.studyPlanService.getStudyPlan(id);
+        checkResourceFound(attachedSP);
+        int semesterNumber = attachedSP.getSemesters().size() + 1;
+        semester.setStudyPlan(attachedSP);
+        semester.setNumber(semesterNumber);
+        Semester createdSemester = this.semesterService.createSemester(semester);
+        return createdSemester;
     }
 }
