@@ -4,8 +4,10 @@ import com.advisorapp.api.model.StudyPlan;
 import com.advisorapp.api.model.User;
 import com.advisorapp.api.exception.DataFormatException;
 import com.advisorapp.api.model.User;
+import com.advisorapp.api.model.Uv;
 import com.advisorapp.api.service.StudyPlanService;
 import com.advisorapp.api.service.UserService;
+import com.advisorapp.api.service.UvService;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -29,6 +31,9 @@ public class UserController extends AbstractRestHandler {
 
     @Autowired
     private StudyPlanService studyPlanService;
+
+    @Autowired
+    private UvService uvService;
 
     @RequestMapping(value = "",
             method = RequestMethod.POST,
@@ -136,4 +141,5 @@ public class UserController extends AbstractRestHandler {
         StudyPlan createdStudyPlan = this.studyPlanService.createStudyPlan(studyPlan);
         return createdStudyPlan;
     }
+    
 }

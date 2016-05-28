@@ -3,6 +3,7 @@ package com.advisorapp.api.controller;
 import com.advisorapp.api.model.Semester;
 import com.advisorapp.api.exception.DataFormatException;
 import com.advisorapp.api.model.Semester;
+import com.advisorapp.api.model.Uv;
 import com.advisorapp.api.service.SemesterService;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Set;
 
 @RestController
 @RequestMapping(value = "/api/semesters")
@@ -80,4 +82,22 @@ public class SemesterController extends AbstractRestHandler {
         checkResourceFound(this.semesterService.getSemester(id));
         this.semesterService.deleteSemester(id);
     }
+
+    // ----- Semester's UV requests handler
+
+    @RequestMapping(value = "/{id}/uvs",
+            method = RequestMethod.GET,
+            produces = {"application/json"})
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get SP's semesters.", notes = "You have to provide a valid Semester ID.")
+    public
+    @ResponseBody
+    Set<Uv> getSemesterBySP(@ApiParam(value = "The ID of the Semester.", required = true)
+                                  @PathVariable("id") Long id,
+                            HttpServletRequest request, HttpServletResponse response) throws Exception {
+        Semester semester = this.semesterService.getSemester(id);
+        checkResourceFound(semester);
+        return semester.getUvs();
+    }
+
 }
