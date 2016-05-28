@@ -3,13 +3,4 @@ jdk: oraclejdk8
 cache:
   directories:
   - $HOME/.m2
-addons:
-  apt:
-    packages:
-      - sshpass
 script: mvn clean verify
-deploy:
-  provider: script
-  script: travis_deploy.sh
-  on:
-    branch: develop

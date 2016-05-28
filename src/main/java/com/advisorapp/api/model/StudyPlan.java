@@ -1,6 +1,7 @@
 package com.advisorapp.api.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -17,21 +18,19 @@ public class StudyPlan implements Serializable{
     @GeneratedValue
     private long id;
 
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonBackReference
     private User user;
 
-    @Column()
+    @Column
     private String name;
 
     @OneToMany(mappedBy = "studyPlan", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @JsonIgnore
     private Set<Semester> semesters;
 
     @ManyToOne
     @JoinColumn(name = "option_id")
-    @JsonBackReference
     private Option option;
 
     public long getId() {
