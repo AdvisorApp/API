@@ -47,21 +47,21 @@ public class Uv {
 
     @ManyToOne
     @JoinColumn(name = "uv_type_id",nullable = false)
-    @JsonBackReference
     private UvType uvType;
 
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "uvs")
+    @JsonIgnore
     private Set<Semester> semesters;
 
     @ManyToMany
     @JoinTable(name = "corequisite_uv",
             joinColumns = @JoinColumn(name = "corequisite2"),
             inverseJoinColumns = @JoinColumn(name = "corequisite1"))
-    @JsonBackReference
+    @JsonIgnore
     private Set<Uv> corequisitesUv;
 
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "corequisitesUv")
-    @JsonManagedReference
+    @JsonIgnore
     private Set<Uv> corequisitesUvOf;
 
     @ManyToMany

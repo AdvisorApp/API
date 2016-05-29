@@ -21,7 +21,7 @@ public interface UvUserRepository extends PagingAndSortingRepository<UvUser,Long
     @Query("select u from UvUser u where u.uv = :uv")
     Set<UvUser> findByUV(@Param("uv") Uv uv);
 
-    @Query("select u from UvUser u where u.uv = :uv or u.user = :user")
+    @Query("select u from UvUser u where u.uv = :uv and u.user = :user")
     UvUser findByUvAndUser(@Param("uv") Uv uv,
                            @Param("user") User user);
 

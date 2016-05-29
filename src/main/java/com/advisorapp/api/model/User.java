@@ -1,10 +1,16 @@
 package com.advisorapp.api.model;
 
 
+import com.advisorapp.api.dao.UvRepository;
+import com.advisorapp.api.dao.UvUserRepository;
+import com.advisorapp.api.service.UvService;
+import com.advisorapp.api.service.UvUserService;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.validator.constraints.Email;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;

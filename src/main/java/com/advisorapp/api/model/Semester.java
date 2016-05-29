@@ -33,7 +33,6 @@ public class Semester {
         joinColumns = {@JoinColumn(name = "semester_id",nullable = false) },
         inverseJoinColumns = { @JoinColumn(name = "uv_id", nullable = false)}
     )
-    @JsonIgnore
     private Set<Uv> uvs;
 
     public Set<Uv> getUvs() {
