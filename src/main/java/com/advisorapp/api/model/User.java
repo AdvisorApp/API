@@ -9,7 +9,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "users")
+@Table(
+        name = "users",
+        uniqueConstraints={@UniqueConstraint(columnNames = "email")})
 public class User {
 
     @Id
@@ -25,7 +27,7 @@ public class User {
     @Column(name = "birthday", nullable = false)
     private Date birthday;
 
-    @Column(name = "remote_id", unique = true)
+    @Column(name = "remote_id")
     private String remoteId;
 
     @Column(name = "email", nullable = false, unique = true)
