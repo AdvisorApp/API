@@ -27,6 +27,7 @@ public class StudyPlan implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "option_id")
+    @JsonManagedReference
     private Option option;
 
     public StudyPlan() {

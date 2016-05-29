@@ -35,36 +35,42 @@ public class SecurityFilter implements Filter {
         try {
             HttpServletRequest request = (HttpServletRequest) servletRequest;
             if(shouldIFilter(request)) {
+                System.out.println("No filter this request");
                 filterChain.doFilter(
                         servletRequest,
                         servletResponse
                 );
             }else{
-                processTokenCheck(servletResponse, filterChain, request);
+                boolean ok = processTokenCheck(servletResponse, filterChain, request);
+                if(! ok) {
+                    sendUnauthorizedResponse((HttpServletResponse) servletResponse);
+                }
             }
         } catch (Exception e) {
             System.err.println("SecurityFilter error : " + e.getMessage());
             throw e;
-        } finally {
-            sendUnauthorizedResponse((HttpServletResponse) servletResponse);
         }
     }
 
-    private void processTokenCheck(ServletResponse servletResponse, FilterChain filterChain, HttpServletRequest request) throws IOException, ServletException {
+    private boolean processTokenCheck(ServletResponse servletResponse, FilterChain filterChain, HttpServletRequest request) throws IOException, ServletException {
+        boolean ok = false;
         String token = request.getHeader(HEADER_NAME);
         if (token != null) {
             Optional<User> userOpt = authenticationService.verifyToken(token);
             if(userOpt.isPresent()){
+                ok = true;
                 filterChain.doFilter(
                         new SecuredRequest(request, userOpt.get()),
                         servletResponse
                 );
             }
         }
+        return ok;
     }
 
     private boolean shouldIFilter(HttpServletRequest request) {
-        return authorizedRoutes.contains(request.getServletPath());
+        String url = request.getServletPath();
+        return authorizedRoutes.contains(url);
     }
 
 

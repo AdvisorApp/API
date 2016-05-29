@@ -62,7 +62,7 @@ public class AuthController extends AbstractRestHandler {
 
     @RequestMapping(value = "/signup",
             method = RequestMethod.POST,
-            consumes = "application/json")
+            consumes = "application/json;charset=UTF-8")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "SignUp", notes = "Sign Up a user")
     public void signUp(@RequestBody User user,

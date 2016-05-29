@@ -159,7 +159,7 @@ public class User {
         result = 31 * result + (getRemoteId() != null ? getRemoteId().hashCode() : 0);
         result = 31 * result + (getEmail() != null ? getEmail().hashCode() : 0);
         result = 31 * result + (getStudyPlans() != null ? getStudyPlans().hashCode() : 0);
-
+        
         return result;
     }
 }
