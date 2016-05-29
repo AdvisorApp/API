@@ -1,6 +1,5 @@
 package com.advisorapp.api.model;
 
-
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;
 import java.util.Date;

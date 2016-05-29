@@ -3,6 +3,7 @@
 ### Java properties file.
 
 spring:
+  profiles: default
   jmx:
     enabled: false
   datasource:
@@ -46,15 +47,13 @@ hotel.service:
 
 ---
 
-
 spring:
   profiles: production
   datasource:
     url: jdbc:mysql://127.0.0.1:1664/advisorapp
 
-
-
 ---
+
 spring:
   profiles: test
 

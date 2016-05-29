@@ -1,19 +1,14 @@
 package com.advisorapp.api.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import javax.persistence.*;
-import javax.xml.bind.annotation.*;
 import java.io.Serializable;
-import java.util.Date;
 import java.util.Set;
 
 @Entity
 @Table(name = "study_plans")
-public class StudyPlan implements Serializable{
+public class StudyPlan implements Serializable {
     @Id
     @GeneratedValue
     private long id;

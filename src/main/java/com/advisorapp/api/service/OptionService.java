@@ -12,9 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-/*
- * Sample service to demonstrate what the API would use to get things done
- */
 @Service
 public class OptionService {
 

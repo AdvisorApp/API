@@ -20,10 +20,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Set;
 
-/*
- * Demonstrates how to set up RESTful API endpoints using Spring MVC
- */
-
 @RestController
 @RequestMapping(value = "/api/studyPlans")
 @Api(value = "studyPlans", description = "StudyPlan API")

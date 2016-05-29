@@ -5,9 +5,6 @@ import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.NotNull;
 
-/*
- * demonstrates how service-specific properties can be injected
- */
 @ConfigurationProperties(prefix = "hotel.service", ignoreUnknownFields = false)
 @Component
 public class ServiceProperties {

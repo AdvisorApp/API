@@ -1,6 +1,5 @@
 package com.advisorapp.api.model;
 
-
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;

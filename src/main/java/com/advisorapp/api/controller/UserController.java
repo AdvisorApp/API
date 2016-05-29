@@ -19,10 +19,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Set;
 
-/*
- * Demonstrates how to set up RESTful API endpoints using Spring MVC
- */
-
 @RestController
 @RequestMapping(value = "/api/users")
 @Api(value = "users", description = "User API")

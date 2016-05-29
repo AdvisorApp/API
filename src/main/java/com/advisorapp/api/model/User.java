@@ -1,12 +1,8 @@
 package com.advisorapp.api.model;
 
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
-import javax.xml.bind.annotation.*;
 import java.util.Date;
 import java.util.Set;
 
