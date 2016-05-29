@@ -29,15 +29,19 @@ public class UvType {
         return type;
     }
 
-    public void setType(String type) {
+    public UvType setType(String type) {
         this.type = type;
+
+        return this;
     }
 
     public double getHoursByCredit() {
         return hoursByCredit;
     }
 
-    public void setHoursByCredit(double hoursByCredit) {
+    public UvType setHoursByCredit(double hoursByCredit) {
         this.hoursByCredit = hoursByCredit;
+
+        return this;
     }
 }

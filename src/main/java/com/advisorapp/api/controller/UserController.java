@@ -1,11 +1,13 @@
 package com.advisorapp.api.controller;
 
-import com.advisorapp.api.model.StudyPlan;
-import com.advisorapp.api.model.User;
+import com.advisorapp.api.dao.UvRepository;
+import com.advisorapp.api.model.*;
 import com.advisorapp.api.exception.DataFormatException;
 import com.advisorapp.api.model.User;
 import com.advisorapp.api.service.StudyPlanService;
 import com.advisorapp.api.service.UserService;
+import com.advisorapp.api.service.UvService;
+import com.advisorapp.api.service.UvUserService;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Iterator;
 import java.util.Set;
 
 @RestController
@@ -30,6 +33,15 @@ public class UserController extends AbstractRestHandler {
     @Autowired
     private StudyPlanService studyPlanService;
 
+    @Autowired
+    private UvService uvService;
+
+    @Autowired
+    private UvRepository uvRepository;
+
+    @Autowired
+    private UvUserService uvUserService;
+
     @RequestMapping(value = "",
             method = RequestMethod.POST,
             consumes = "application/json",
@@ -39,6 +51,17 @@ public class UserController extends AbstractRestHandler {
     public void createUser(@RequestBody User user,
                             HttpServletRequest request, HttpServletResponse response) {
         User createdUser = this.userService.createUser(user);
+
+        // Create All UvUser for each UVs existing on database.
+        Iterator<Uv> uvs = this.uvRepository.findAll().iterator();
+        while(uvs.hasNext()){
+            Uv uv = uvs.next();
+            UvUser uvUser = new UvUser();
+            uvUser.setUser(createdUser);
+            uvUser.setUv(uv);
+            UvUser createdUvUser = this.uvUserService.createUvUser(uvUser);
+        }
+
         response.setHeader("Location", request.getRequestURL().append("/").append(createdUser.getId()).toString());
     }
 
@@ -136,4 +159,72 @@ public class UserController extends AbstractRestHandler {
         StudyPlan createdStudyPlan = this.studyPlanService.createStudyPlan(studyPlan);
         return createdStudyPlan;
     }
+
+    // ----- User's UvUser requests handler
+
+    @RequestMapping(value = "/{id}/uvUsers",
+            method = RequestMethod.GET,
+            produces = {"application/json"})
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get user's uvUsers.", notes = "You have to provide a valid user ID.")
+    public
+    @ResponseBody
+    Set<UvUser> getUvUserByUser(@ApiParam(value = "The ID of the user.", required = true)
+                                      @PathVariable("id") Long id,
+                                   HttpServletRequest request, HttpServletResponse response) throws Exception {
+        User user = this.userService.getUser(id);
+        checkResourceFound(user);
+
+        return uvUserService.getUvUserByUser(user);
+    }
+
+    @RequestMapping(value = "/{user_id}/uvUsers/{uv_id}",
+            method = RequestMethod.GET,
+            produces = {"application/json"})
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get user's uvUsers.", notes = "You have to provide a valid user and UV ID.")
+    public
+    @ResponseBody
+    UvUser getUvUserByUserAndUV(@ApiParam(value = "The ID of the user.", required = true)
+                                @PathVariable("user_id") Long user_id,
+                                @ApiParam(value = "The ID of the UV.", required = true)
+                                @PathVariable("uv_id") Long uv_id,
+                                HttpServletRequest request, HttpServletResponse response) throws Exception {
+        User user = this.userService.getUser(user_id);
+        Uv uv = this.uvService.getUv(uv_id);
+        checkResourceFound(user);
+        checkResourceFound(uv);
+        if (user_id != user.getId()) throw new DataFormatException("User ID doesn't match!");
+        if (uv_id != uv.getId()) throw new DataFormatException("UV ID doesn't match!");
+
+        return uvUserService.getUvUserByUVAndUser(uv, user);
+    }
+
+    @RequestMapping(value = "/{user_id}/uvUsers/{uv_id}",
+            method = RequestMethod.PUT,
+            consumes = "application/json",
+            produces = "application/json")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiOperation(value = "Update user's uvUsers.", notes = "You have to provide a valid user and UV ID.")
+    public void updateUvUserByUserAndUV(@ApiParam(value = "The ID of the user.", required = true)
+                                        @PathVariable("user_id") Long user_id,
+                                        @ApiParam(value = "The ID of the UV.", required = true)
+                                        @PathVariable("uv_id") Long uv_id,
+                                        @RequestBody UvUser uvUser,
+                                        HttpServletRequest request, HttpServletResponse response) throws Exception {
+        User user = this.userService.getUser(user_id);
+        Uv uv = this.uvService.getUv(uv_id);
+        checkResourceFound(user);
+        checkResourceFound(uv);
+        if (user_id != user.getId()) throw new DataFormatException("User ID doesn't match!");
+        if (uv_id != uv.getId()) throw new DataFormatException("UV ID doesn't match!");
+
+        UvUser uvUserOrigin = uvUserService.getUvUserByUVAndUser(uv, user);
+        if (uvUserOrigin.getId() != uvUser.getId()) throw new DataFormatException("UvUser ID doesn't match!");
+
+        uvUser.setUser(user);
+        uvUser.setUv(uv);
+        this.uvUserService.updateUvUser(uvUser);
+    }
+
 }

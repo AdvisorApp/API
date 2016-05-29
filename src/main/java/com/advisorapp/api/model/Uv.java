@@ -1,9 +1,12 @@
 package com.advisorapp.api.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -32,32 +35,32 @@ public class Uv {
 
     @Column(nullable = false)
     @Range(min = 1)
-    private double chs;
+    private int chs;
 
+    @Column(name = "location")
     private Location location;
 
     @ManyToOne
+    @JoinColumn(name = "option_id", nullable = true)
+    private Option option;
+
+    @ManyToOne
     @JoinColumn(name = "uv_type_id",nullable = false)
-    @JsonBackReference
     private UvType uvType;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "uv_semester", joinColumns = {
-            @JoinColumn(name = "uv_id",nullable = false) },
-            inverseJoinColumns = { @JoinColumn(name = "semester_id", nullable = false)})
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "uvs")
+    @JsonIgnore
     private Set<Semester> semesters;
-
 
     @ManyToMany
     @JoinTable(name = "corequisite_uv",
             joinColumns = @JoinColumn(name = "corequisite2"),
             inverseJoinColumns = @JoinColumn(name = "corequisite1"))
+    @JsonIgnore
     private Set<Uv> corequisitesUv;
 
-    @ManyToMany
-    @JoinTable(name = "corequisite_uv",
-            joinColumns = @JoinColumn(name = "corequisite1"),
-            inverseJoinColumns = @JoinColumn(name = "corequisite2"))
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "corequisitesUv")
+    @JsonIgnore
     private Set<Uv> corequisitesUvOf;
 
     @ManyToMany
@@ -70,6 +73,14 @@ public class Uv {
         return location;
     }
 
+    public Uv()
+    {
+        this.semesters = new HashSet<>();
+        this.corequisitesUv = new HashSet<>();
+        this.corequisitesUvOf = new HashSet<>();
+        this.prerequisitesUv = new HashSet<>();
+    }
+
     public long getId() {
         return id;
     }
@@ -78,95 +89,146 @@ public class Uv {
         return remoteId;
     }
 
-    public void setRemoteId(String remoteId) {
+    public Uv setRemoteId(String remoteId) {
         this.remoteId = remoteId;
+
+        return this;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public Uv setName(String name) {
         this.name = name;
+
+        return this;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
+    public Uv setDescription(String description) {
         this.description = description;
+
+        return this;
     }
 
     public int getMinSemester() {
         return minSemester;
     }
 
-    public void setMinSemester(int minSemester) {
+    public Uv setMinSemester(int minSemester) {
         this.minSemester = minSemester;
+
+        return this;
     }
 
     public boolean isAvailableForCart() {
         return isAvailableForCart;
     }
 
-    public void setIsAvailableForCard(boolean isAvailableForCard) {
+    public Uv setIsAvailableForCard(boolean isAvailableForCard) {
         this.isAvailableForCart = isAvailableForCard;
+
+        return this;
     }
 
-    public double getChs() {
+    public int getChs() {
         return chs;
     }
 
-    public void setChs(double chs) {
+    public Uv setChs(int chs) {
         this.chs = chs;
+
+        return this;
     }
 
-    public void setLocation(Location location) {
+    public Uv setLocation(Location location) {
         this.location = location;
+
+        return this;
     }
 
     public UvType getUvType() {
         return uvType;
     }
 
-    public void setUvType(UvType uvType) {
+    public Uv setUvType(UvType uvType) {
         this.uvType = uvType;
+
+        return this;
     }
 
     public Set<Semester> getSemesters() {
         return semesters;
     }
 
-    public void setSemesters(Set<Semester> semesters) {
-        this.semesters = semesters;
-    }
 
-    public void addSemester(Semester semester) {
+    public Uv addSemester(Semester semester) {
         this.semesters.add(semester);
+
+        return this;
     }
 
     public Set<Uv> getCorequisitesUv() {
         return corequisitesUv;
     }
 
-    public void setCorequisitesUv(Set<Uv> corequisitesUv) {
+    public Uv addCorequisiteUv(Uv corequisite)
+    {
+        this.corequisitesUv.add(corequisite);
+        corequisite.addCorequisiteOf(this);
+
+        return this;
+    }
+
+    public Uv setCorequisitesUv(Set<Uv> corequisitesUv) {
         this.corequisitesUv = corequisitesUv;
+        for (Uv coUv : corequisitesUv)
+        {
+            coUv.addCorequisiteOf(this);
+        }
+
+        return this;
+    }
+
+    public Uv addCorequisiteOf(Uv uv)
+    {
+        this.corequisitesUvOf.add(uv);
+
+        return this;
     }
 
     public Set<Uv> getCorequisitesUvOf() {
         return corequisitesUvOf;
     }
 
-    public void setCorequisitesUvOf(Set<Uv> corequisitesUvOf) {
-        this.corequisitesUvOf = corequisitesUvOf;
-    }
-
     public Set<Uv> getPrerequisitesUv() {
         return prerequisitesUv;
     }
 
-    public void setPrerequisitesUv(Set<Uv> prerequisitesUv) {
+    public Uv setPrerequisitesUv(Set<Uv> prerequisitesUv) {
         this.prerequisitesUv = prerequisitesUv;
+
+        return this;
+    }
+
+    public Uv addPrerequisite(Uv prerequisite)
+    {
+        this.prerequisitesUv.add(prerequisite);
+
+        return this;
+    }
+
+    public Option getOption() {
+        return option;
+    }
+
+    public Uv setOption(Option option) {
+        this.option = option;
+
+        return this;
     }
 }
