@@ -1,6 +1,7 @@
 package com.advisorapp.api.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;
@@ -17,12 +18,12 @@ public class UvUser {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    @JsonBackReference
+    @JsonIgnore
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "uv_id", nullable = false)
-    @JsonBackReference
+    @JsonIgnore
     private Uv uv;
 
     @Column(name = "user_average")

@@ -1,8 +1,8 @@
 package com.advisorapp.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.validator.constraints.Email;
+
 
 import javax.persistence.*;
 import java.util.Date;
