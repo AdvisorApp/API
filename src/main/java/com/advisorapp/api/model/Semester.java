@@ -1,13 +1,8 @@
 package com.advisorapp.api.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
-import javax.xml.bind.annotation.*;
-import java.util.Date;
 import java.util.Set;
 
 @Entity
