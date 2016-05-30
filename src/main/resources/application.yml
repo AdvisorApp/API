@@ -2,17 +2,18 @@
 ### This fils is in Yaml format but you can also do this using the traditional
 ### Java properties file.
 
-spring.jmx:
-   enabled: false
-
-spring.datasource:
+spring:
+  profiles: default
+  jmx:
+    enabled: false
+  datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1/bootexample
+    url: jdbc:mysql://127.0.0.1/advisorapp
     username: root
     password: root
-
-spring.jpa.properties.hibernate.dialect: org.hibernate.dialect.MySQL5Dialect
-spring.jpa.hibernate.ddl-auto: update
+  jpa:
+    properties.hibernate.dialect: org.hibernate.dialect.MySQL5Dialect
+    hibernate.ddl-auto: update
 
 server:
   port: 8090
@@ -30,9 +31,10 @@ management:
 
 #default project info followed by actual injected pom-specified values.
 project:
-  name: spring-boot-rest-example
+  name: advisorapp-api
   version: 0.1
-  description: boot-example default description
+  description: advisorapp default description
+
 info:
   build:
     artifact: ${project.artifactId}
@@ -40,11 +42,17 @@ info:
     description: ${project.description}
     version: ${project.version}
 
-hotel.service:
-  name: 'default profile:'
+privateKey: "9g4LrPHpdpcjQ33KFTHJWjAsuPGa8yaKTS8YFJLEa5tQjfdMzDrxLsDyRA7tYmbBr9E66ppbMcLQXRccq7RYVBHEm5mwDHtnSHLt"
+salt: "$2a$10$4/ln1/Ue6fCAaYmxukEvH."
+
 ---
+
+spring:
+  profiles: production
+  datasource:
+    url: jdbc:mysql://127.0.0.1:1664/advisorapp
+
+---
+
 spring:
   profiles: test
-
-hotel.service:
-  name: 'test profile:'

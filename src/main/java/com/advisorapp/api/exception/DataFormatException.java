@@ -1,7 +1,7 @@
 package com.advisorapp.api.exception;
 
 /**
- * for HTTP 400 errors
+ * For HTTP 400 errors
  */
 public final class DataFormatException extends RuntimeException {
     public DataFormatException() {

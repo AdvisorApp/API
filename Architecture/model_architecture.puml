@@ -1,15 +1,22 @@
+@startuml
+
+title "AdvisorApp Architecture"
+
 object users {
 id
-name
+firstname
 lastname
+email
+password
 birthday
 remoteId
 }
 
 object uvUser {
-    userAverage
-    uvMark
-    uvComment
+id
+userAverage
+uvMark
+uvComment
 }
 
 
@@ -31,10 +38,11 @@ chs
 
 object studyPlans {
 id
-
+name
 }
 
 object options {
+id
 name
 
 }
@@ -44,8 +52,6 @@ object semesters {
     number
 }
 
-object carts {
-}
 
 object uvTypes {
 id
@@ -59,16 +65,16 @@ uvs "*" -- "*" uvs : uvPrerequisite
 uvUser "*" -- "1" users : user
 uvUser  "*" -- "1" uvs : uv
 
-users "0,1" -- "*" studyPlans
-studyPlans "*" -- "0,1" options
+users "0,1" -- "*" studyPlans : user
+studyPlans "*" -- "0,1" options : option
 options "0,1" -- "*" uvs : option
-studyPlans "1" -- "*" semesters
+studyPlans "1" -- "*" semesters : studyplan
 semesters "*" -- "*" uvs
-carts "0,1" -- "*" semesters
-carts "*" -- "*" uvs
 
 uvs "*" -- "1" uvTypes : type
 
 uvs "*" -- "1" location : location
+
+
 
 @enduml
