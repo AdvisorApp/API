@@ -23,4 +23,9 @@ public class OptionFactory {
         Option option = new Option();
         return this.optionService.createOption(option.setName(name));
     }
+
+    public OptionService getOptionService()
+    {
+        return this.optionService;
+    }
 }

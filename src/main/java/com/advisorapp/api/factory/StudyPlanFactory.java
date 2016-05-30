@@ -58,4 +58,14 @@ public class StudyPlanFactory {
 
         return studyPlan;
     }
+
+    public StudyPlan createStudyPlanWithUser(StudyPlan studyPlan, User user)
+    {
+        return this.studyPlanService.createStudyPlan(studyPlan.setUser(user));
+    }
+
+    public StudyPlanService getStudyPlanService()
+    {
+        return studyPlanService;
+    }
 }

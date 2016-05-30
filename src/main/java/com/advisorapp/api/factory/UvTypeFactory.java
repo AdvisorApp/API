@@ -24,4 +24,9 @@ public class UvTypeFactory {
                 .setHoursByCredit(hoursByCredit)
         );
     }
+
+    public UvTypeService getUvTypeService()
+    {
+        return this.uvTypeService;
+    }
 }

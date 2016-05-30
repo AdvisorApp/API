@@ -1,5 +1,7 @@
 package com.advisorapp.api.controller;
 
+import com.advisorapp.api.factory.SemesterFactory;
+import com.advisorapp.api.factory.StudyPlanFactory;
 import com.advisorapp.api.model.Semester;
 import com.advisorapp.api.model.StudyPlan;
 import com.advisorapp.api.exception.DataFormatException;
@@ -26,10 +28,10 @@ import java.util.Set;
 public class StudyPlanController extends AbstractRestHandler {
 
     @Autowired
-    private StudyPlanService studyPlanService;
+    private StudyPlanFactory studyPlanFactory;
 
     @Autowired
-    private SemesterService semesterService;
+    private SemesterFactory semesterFactory;
 
     @RequestMapping(value = "",
             method = RequestMethod.GET,
@@ -39,11 +41,11 @@ public class StudyPlanController extends AbstractRestHandler {
     public
     @ResponseBody
     Page<StudyPlan> getAllStudyPlans(@ApiParam(value = "The page number (zero-based)", required = true)
-                           @RequestParam(value = "page", required = true, defaultValue = DEFAULT_PAGE_NUM) Integer page,
-                           @ApiParam(value = "Tha page size", required = true)
-                           @RequestParam(value = "size", required = true, defaultValue = DEFAULT_PAGE_SIZE) Integer size,
-                           HttpServletRequest request, HttpServletResponse response) {
-        return this.studyPlanService.getAllStudyPlans(page, size);
+                                     @RequestParam(value = "page", required = true, defaultValue = DEFAULT_PAGE_NUM) Integer page,
+                                     @ApiParam(value = "Tha page size", required = true)
+                                     @RequestParam(value = "size", required = true, defaultValue = DEFAULT_PAGE_SIZE) Integer size,
+                                     HttpServletRequest request, HttpServletResponse response) {
+        return this.studyPlanFactory.getStudyPlanService().getAllStudyPlans(page, size);
     }
 
     @RequestMapping(value = "/{id}",
@@ -54,9 +56,9 @@ public class StudyPlanController extends AbstractRestHandler {
     public
     @ResponseBody
     StudyPlan getStudyPlan(@ApiParam(value = "The ID of the studyPlan.", required = true)
-                 @PathVariable("id") Long id,
-                 HttpServletRequest request, HttpServletResponse response) throws Exception {
-        StudyPlan studyPlan = this.studyPlanService.getStudyPlan(id);
+                           @PathVariable("id") Long id,
+                           HttpServletRequest request, HttpServletResponse response) throws Exception {
+        StudyPlan studyPlan = this.studyPlanFactory.getStudyPlanService().getStudyPlan(id);
         checkResourceFound(studyPlan);
         //todo: http://goo.gl/6iNAkz
         return studyPlan;
@@ -69,11 +71,11 @@ public class StudyPlanController extends AbstractRestHandler {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiOperation(value = "Update a studyPlan resource.", notes = "You have to provide a valid studyPlan ID in the URL and in the payload. The ID attribute can not be updated.")
     public void updateStudyPlan(@ApiParam(value = "The ID of the existing studyPlan resource.", required = true)
-                           @PathVariable("id") Long id, @RequestBody StudyPlan studyPlan,
-                           HttpServletRequest request, HttpServletResponse response) {
-        checkResourceFound(this.studyPlanService.getStudyPlan(id));
+                                @PathVariable("id") Long id, @RequestBody StudyPlan studyPlan,
+                                HttpServletRequest request, HttpServletResponse response) {
+        checkResourceFound(this.studyPlanFactory.getStudyPlanService().getStudyPlan(id));
         if (id != studyPlan.getId()) throw new DataFormatException("ID doesn't match!");
-        this.studyPlanService.updateStudyPlan(studyPlan);
+        this.studyPlanFactory.getStudyPlanService().updateStudyPlan(studyPlan);
     }
 
     //todo: @ApiImplicitParams, @ApiResponses
@@ -83,10 +85,10 @@ public class StudyPlanController extends AbstractRestHandler {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiOperation(value = "Delete a studyPlan resource.", notes = "You have to provide a valid studyPlan ID in the URL. Once deleted the resource can not be recovered.")
     public void deleteStudyPlan(@ApiParam(value = "The ID of the existing studyPlan resource.", required = true)
-                           @PathVariable("id") Long id, HttpServletRequest request,
-                           HttpServletResponse response) {
-        checkResourceFound(this.studyPlanService.getStudyPlan(id));
-        this.studyPlanService.deleteStudyPlan(id);
+                                @PathVariable("id") Long id, HttpServletRequest request,
+                                HttpServletResponse response) {
+        checkResourceFound(this.studyPlanFactory.getStudyPlanService().getStudyPlan(id));
+        this.studyPlanFactory.getStudyPlanService().deleteStudyPlan(id);
     }
 
     // ----- SP's semester requests handler
@@ -99,9 +101,9 @@ public class StudyPlanController extends AbstractRestHandler {
     public
     @ResponseBody
     Set<Semester> getSemesterBySP(@ApiParam(value = "The ID of the SP.", required = true)
-                                      @PathVariable("id") Long id,
+                                  @PathVariable("id") Long id,
                                   HttpServletRequest request, HttpServletResponse response) throws Exception {
-        StudyPlan studyPlan = this.studyPlanService.getStudyPlan(id);
+        StudyPlan studyPlan = this.studyPlanFactory.getStudyPlanService().getStudyPlan(id);
         checkResourceFound(studyPlan);
         return studyPlan.getSemesters();
     }
@@ -113,13 +115,12 @@ public class StudyPlanController extends AbstractRestHandler {
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Create a semester for a SP.", notes = "Returns the URL of the new resource in the Location header.")
     public Semester createSemesterForSP(@ApiParam(value = "The ID of the SP.", required = true)
-                                            @PathVariable("id") Long id,
-                                            @RequestBody Semester semester,
-                                            HttpServletRequest request, HttpServletResponse response) throws Exception {
-        StudyPlan attachedSP = this.studyPlanService.getStudyPlan(id);
+                                        @PathVariable("id") Long id,
+                                        @RequestBody Semester semester,
+                                        HttpServletRequest request, HttpServletResponse response) throws Exception {
+        StudyPlan attachedSP = this.studyPlanFactory.getStudyPlanService().getStudyPlan(id);
         checkResourceFound(attachedSP);
-        semester.setStudyPlan(attachedSP);
-        Semester createdSemester = this.semesterService.createSemester(semester);
-        return createdSemester;
+
+        return this.semesterFactory.create(attachedSP, semester);
     }
 }

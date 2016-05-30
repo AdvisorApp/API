@@ -1,6 +1,7 @@
 package com.advisorapp.api.service;
 
 import com.advisorapp.api.dao.UserRepository;
+import com.advisorapp.api.factory.UserFactory;
 import com.advisorapp.api.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,5 +53,9 @@ public class UserService {
             counterService.increment("advisorapp.UserService.getAll.largePayload");
         }
         return pageOfUsers;
+    }
+
+    public UserRepository userRepository() {
+        return this.userRepository;
     }
 }

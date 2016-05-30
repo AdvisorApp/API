@@ -1,5 +1,6 @@
 package com.advisorapp.api.controller;
 
+import com.advisorapp.api.factory.UvUserFactory;
 import com.advisorapp.api.model.UvUser;
 import com.advisorapp.api.exception.DataFormatException;
 import com.advisorapp.api.model.UvUser;
@@ -19,9 +20,8 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping(value = "/api/uvUsers")
 @Api(value = "uvUsers", description = "UvUser API")
 public class UvUserController extends AbstractRestHandler {
-
     @Autowired
-    private UvUserService uvUserService;
+    private UvUserFactory uvUserFactory;
 
     @RequestMapping(value = "",
             method = RequestMethod.POST,
@@ -31,8 +31,9 @@ public class UvUserController extends AbstractRestHandler {
     @ApiOperation(value = "Create an uvUser resource.", notes = "Returns the URL of the new resource in the Location header.")
     public void createUvUser(@RequestBody UvUser uvUser,
                            HttpServletRequest request, HttpServletResponse response) {
-        UvUser createdUvUser = this.uvUserService.createUvUser(uvUser);
-        response.setHeader("Location", request.getRequestURL().append("/").append(createdUvUser.getId()).toString());
+        response.setHeader("Location", request.getRequestURL().append("/").append(
+                this.uvUserFactory.getUvUserService().createUvUser(uvUser).getId()).toString()
+        );
     }
 
     @RequestMapping(value = "",
@@ -47,7 +48,7 @@ public class UvUserController extends AbstractRestHandler {
                            @ApiParam(value = "Tha page size", required = true)
                            @RequestParam(value = "size", required = true, defaultValue = DEFAULT_PAGE_SIZE) Integer size,
                            HttpServletRequest request, HttpServletResponse response) {
-        return this.uvUserService.getAllUvUsers(page, size);
+        return this.uvUserFactory.getUvUserService().getAllUvUsers(page, size);
     }
 
     @RequestMapping(value = "/{id}",
@@ -60,7 +61,7 @@ public class UvUserController extends AbstractRestHandler {
     UvUser getUvUser(@ApiParam(value = "The ID of the uvUser.", required = true)
                  @PathVariable("id") Long id,
                  HttpServletRequest request, HttpServletResponse response) throws Exception {
-        UvUser uvUser = this.uvUserService.getUvUser(id);
+        UvUser uvUser = this.uvUserFactory.getUvUserService().getUvUser(id);
         checkResourceFound(uvUser);
         //todo: http://goo.gl/6iNAkz
         return uvUser;
@@ -75,9 +76,9 @@ public class UvUserController extends AbstractRestHandler {
     public void updateUvUser(@ApiParam(value = "The ID of the existing uvUser resource.", required = true)
                            @PathVariable("id") Long id, @RequestBody UvUser uvUser,
                            HttpServletRequest request, HttpServletResponse response) {
-        checkResourceFound(this.uvUserService.getUvUser(id));
+        checkResourceFound(this.uvUserFactory.getUvUserService().getUvUser(id));
         if (id != uvUser.getId()) throw new DataFormatException("ID doesn't match!");
-        this.uvUserService.updateUvUser(uvUser);
+        this.uvUserFactory.getUvUserService().updateUvUser(uvUser);
     }
 
     //todo: @ApiImplicitParams, @ApiResponses
@@ -89,7 +90,7 @@ public class UvUserController extends AbstractRestHandler {
     public void deleteUvUser(@ApiParam(value = "The ID of the existing uvUser resource.", required = true)
                            @PathVariable("id") Long id, HttpServletRequest request,
                            HttpServletResponse response) {
-        checkResourceFound(this.uvUserService.getUvUser(id));
-        this.uvUserService.deleteUvUser(id);
+        checkResourceFound(this.uvUserFactory.getUvUserService().getUvUser(id));
+        this.uvUserFactory.getUvUserService().deleteUvUser(id);
     }
 }

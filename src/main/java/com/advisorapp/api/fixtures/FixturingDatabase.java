@@ -58,19 +58,19 @@ public class FixturingDatabase {
             this.addEntry(
                     "SEMESTERS",
                     semesterKey(i, 1),
-                    this.tankFactory.getSemesterFactory().create(option1, null)
+                    this.tankFactory.getSemesterFactory().createWithUvs(option1, null)
             );
             this.addEntry(
                     "SEMESTERS",
                     semesterKey(i, 2),
-                    this.tankFactory.getSemesterFactory().create(option2, null)
+                    this.tankFactory.getSemesterFactory().createWithUvs(option2, null)
             );
         }
 
         this.addEntry(
                 "SEMESTERS",
                 semesterKey(10, 1),
-                this.tankFactory.getSemesterFactory().create(option1, null)
+                this.tankFactory.getSemesterFactory().createWithUvs(option1, null)
         );
     }
 
@@ -229,6 +229,12 @@ public class FixturingDatabase {
             Set<String> semestersKey
     ) {
 
+        Set<Semester> semesters = new HashSet<>();
+
+        for (String semesterKey : semestersKey) {
+            semesters.add((Semester) this.getEntry("SEMESTERS", semesterKey));
+        }
+
         Uv uv = this.tankFactory.getUvFactory().createUV(
                 name,
                 "SOME DESCRIPTION",
@@ -240,13 +246,10 @@ public class FixturingDatabase {
                 location,
                 (UvType) this.getEntry("UV_TYPE", isTp ? "tp" : "td"),
                 corequisites,
-                prerequisites
+                prerequisites,
+                semesters
         );
         this.addEntry("UV", entryName, uv);
-
-        for (String semesterKey : semestersKey) {
-            this.tankService.getSemesterService().updateSemester(((Semester) this.getEntry("SEMESTERS", semesterKey)).addUv(uv));
-        }
 
         return uv;
     }

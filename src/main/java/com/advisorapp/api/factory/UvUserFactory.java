@@ -31,4 +31,16 @@ public class UvUserFactory {
                 .setUvComment(uvComment)
         );
     }
+
+    public UvUser setup(UvUser uvUser, Uv uv, User user)
+    {
+        this.uvUserService.updateUvUser(uvUser.setUser(user).setUv(uv));
+
+        return uvUser;
+    }
+
+    public UvUserService getUvUserService()
+    {
+        return this.uvUserService;
+    }
 }

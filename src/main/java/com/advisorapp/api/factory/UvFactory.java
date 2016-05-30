@@ -1,9 +1,7 @@
 package com.advisorapp.api.factory;
 
-import com.advisorapp.api.model.Location;
-import com.advisorapp.api.model.Option;
-import com.advisorapp.api.model.Uv;
-import com.advisorapp.api.model.UvType;
+import com.advisorapp.api.model.*;
+import com.advisorapp.api.service.SemesterService;
 import com.advisorapp.api.service.UvService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,6 +15,9 @@ public class UvFactory {
     @Autowired
     private UvService uvService;
 
+    @Autowired
+    private SemesterService semesterService;
+
     public Uv createUV(
         String name,
         String description,
@@ -28,11 +29,12 @@ public class UvFactory {
         Location location,
         UvType uvType,
         Set<Uv> corequisites,
-        Set<Uv> prerequisites
+        Set<Uv> prerequisites,
+        Set<Semester> semesters
     ) {
         Uv uv = new Uv();
 
-        return this.uvService.createUv(
+        uv = this.uvService.createUv(
             uv
                 .setName(name)
                 .setDescription(description)
@@ -46,5 +48,17 @@ public class UvFactory {
                 .setCorequisitesUv(corequisites == null ? new HashSet<Uv>() : corequisites)
                 .setPrerequisitesUv(prerequisites == null ? new HashSet<Uv>() : prerequisites)
         );
+
+        for (Semester semester : semesters)
+        {
+            this.semesterService.updateSemester(semester.addUv(uv));
+        }
+
+        return uv;
+    }
+
+    public UvService getUvService()
+    {
+        return this.uvService;
     }
 }

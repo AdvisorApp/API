@@ -16,7 +16,7 @@ public class SemesterFactory {
     @Autowired
     private SemesterService semesterService;
 
-    public Semester create(StudyPlan studyPlan, Set<Uv> uvSet)
+    public Semester createWithUvs(StudyPlan studyPlan, Set<Uv> uvSet)
     {
         Semester semester = new Semester();
         return this.semesterService.createSemester(
@@ -24,5 +24,15 @@ public class SemesterFactory {
                         .setStudyPlan(studyPlan)
                         .setUvs(uvSet == null ? new HashSet<Uv>() : uvSet)
         );
+    }
+
+    public Semester create(StudyPlan studyPlan, Semester semester)
+    {
+        return this.semesterService.createSemester(semester.setStudyPlan(studyPlan));
+    }
+
+    public SemesterService getSemesterService()
+    {
+        return this.semesterService;
     }
 }

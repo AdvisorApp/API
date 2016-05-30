@@ -1,5 +1,6 @@
 package com.advisorapp.api.controller;
 
+import com.advisorapp.api.factory.SemesterFactory;
 import com.advisorapp.api.model.Semester;
 import com.advisorapp.api.exception.DataFormatException;
 import com.advisorapp.api.model.Semester;
@@ -27,7 +28,7 @@ import java.util.Set;
 public class SemesterController extends AbstractRestHandler {
 
     @Autowired
-    private SemesterService semesterService;
+    private SemesterFactory semesterFactory;
 
     @RequestMapping(value = "",
             method = RequestMethod.GET,
@@ -41,7 +42,7 @@ public class SemesterController extends AbstractRestHandler {
                            @ApiParam(value = "Tha page size", required = true)
                            @RequestParam(value = "size", required = true, defaultValue = DEFAULT_PAGE_SIZE) Integer size,
                            HttpServletRequest request, HttpServletResponse response) {
-        return this.semesterService.getAllSemesters(page, size);
+        return this.semesterFactory.getSemesterService().getAllSemesters(page, size);
     }
 
     @RequestMapping(value = "/{id}",
@@ -54,7 +55,7 @@ public class SemesterController extends AbstractRestHandler {
     Semester getSemester(@ApiParam(value = "The ID of the semester.", required = true)
                  @PathVariable("id") Long id,
                  HttpServletRequest request, HttpServletResponse response) throws Exception {
-        Semester semester = this.semesterService.getSemester(id);
+        Semester semester = this.semesterFactory.getSemesterService().getSemester(id);
         checkResourceFound(semester);
         //todo: http://goo.gl/6iNAkz
         return semester;
@@ -69,9 +70,9 @@ public class SemesterController extends AbstractRestHandler {
     public void updateSemester(@ApiParam(value = "The ID of the existing semester resource.", required = true)
                            @PathVariable("id") Long id, @RequestBody Semester semester,
                            HttpServletRequest request, HttpServletResponse response) {
-        checkResourceFound(this.semesterService.getSemester(id));
+        checkResourceFound(this.semesterFactory.getSemesterService().getSemester(id));
         if (id != semester.getId()) throw new DataFormatException("ID doesn't match!");
-        this.semesterService.updateSemester(semester);
+        this.semesterFactory.getSemesterService().updateSemester(semester);
     }
 
     //todo: @ApiImplicitParams, @ApiResponses
@@ -83,8 +84,8 @@ public class SemesterController extends AbstractRestHandler {
     public void deleteSemester(@ApiParam(value = "The ID of the existing semester resource.", required = true)
                            @PathVariable("id") Long id, HttpServletRequest request,
                            HttpServletResponse response) {
-        checkResourceFound(this.semesterService.getSemester(id));
-        this.semesterService.deleteSemester(id);
+        checkResourceFound(this.semesterFactory.getSemesterService().getSemester(id));
+        this.semesterFactory.getSemesterService().deleteSemester(id);
     }
 
     // ----- Semester's UV requests handler
@@ -99,7 +100,7 @@ public class SemesterController extends AbstractRestHandler {
     Set<Uv> getSemesterBySP(@ApiParam(value = "The ID of the Semester.", required = true)
                                   @PathVariable("id") Long id,
                             HttpServletRequest request, HttpServletResponse response) throws Exception {
-        Semester semester = this.semesterService.getSemester(id);
+        Semester semester = this.semesterFactory.getSemesterService().getSemester(id);
         checkResourceFound(semester);
         return semester.getUvs();
     }
