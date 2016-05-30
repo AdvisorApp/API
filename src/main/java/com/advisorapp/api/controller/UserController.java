@@ -5,8 +5,10 @@ import com.advisorapp.api.factory.UserFactory;
 import com.advisorapp.api.factory.UvFactory;
 import com.advisorapp.api.factory.UvUserFactory;
 import com.advisorapp.api.model.*;
-import com.advisorapp.api.exception.DataFormatException;
+import com.advisorapp.api.model.StudyPlan;
+import com.advisorapp.api.SecuredRequest;
 import com.advisorapp.api.model.User;
+import com.advisorapp.api.exception.DataFormatException;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -47,11 +49,11 @@ public class UserController extends AbstractRestHandler {
         response.setHeader("Location", request.getRequestURL().append("/").append(this.userFactory.createUser(user).getId()).toString());
     }
 
-    @RequestMapping(value = "",
+    @RequestMapping(value = "/me",
             method = RequestMethod.GET,
             produces = "application/json")
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Get a paginated list of all users.", notes = "The list is paginated. You can provide a page number (default 0) and a page size (default 100)")
+    @ApiOperation(value = "Get connected user information", notes = "Returns the information of user that corresponds to the JWT")
     public
     @ResponseBody
     Page<User> getAllUsers(@ApiParam(value = "The page number (zero-based)", required = true)
@@ -108,6 +110,10 @@ public class UserController extends AbstractRestHandler {
         this.userFactory.getUserService().deleteUser(id);
     }
 
+
+    User me(SecuredRequest request, HttpServletResponse response) {
+        return this.userFactory.getUserService().findById(request.getUser().getId());
+    }
 
     // ----- User's study plan requests handler
 

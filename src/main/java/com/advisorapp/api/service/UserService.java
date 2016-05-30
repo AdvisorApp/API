@@ -9,8 +9,14 @@ import org.springframework.boot.actuate.metrics.CounterService;
 import org.springframework.boot.actuate.metrics.GaugeService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import com.advisorapp.api.model.Credential;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
+/*
+ * Sample service to demonstrate what the API would use to get things done
+ */
 @Service
 public class UserService {
 
@@ -25,6 +31,9 @@ public class UserService {
     @Autowired
     GaugeService gaugeService;
 
+    @Autowired
+    AuthenticationService authenticationService;
+
     public UserService() {
     }
 
@@ -32,8 +41,16 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public User signUp(User user) {
+        user.setPassword(authenticationService.hashPassword(user.getPassword()));
+        return userRepository.save(user);
+    }
+
     public User getUser(long id) {
-        return userRepository.findOne(id);
+        User one = userRepository.findOne(id);
+        // This is important to prevent passwords to leave server
+        one.setPassword(""); // TODO improve this
+        return one;
     }
 
     public void updateUser(User user) {
@@ -56,5 +73,23 @@ public class UserService {
 
     public UserRepository userRepository() {
         return this.userRepository;
+    }
+
+    public Optional<User> fetchByCredentials(Credential credential) {
+        return Optional.ofNullable(
+                userRepository.findUserByEmailAndPassword(
+                        credential.getEmail(),
+                        authenticationService.hashPassword(credential.getPassword())
+                )
+        ).map(user ->{
+            user.setPassword("");
+            return user;
+        });
+    }
+
+    public User findById(long id) {
+        User userById = userRepository.findUserById(id);
+        userById.setPassword("");
+        return userById;
     }
 }

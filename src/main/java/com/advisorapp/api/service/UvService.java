@@ -53,4 +53,9 @@ public class UvService {
         }
         return pageOfUvs;
     }
+
+    public UvRepository getUvRepository()
+    {
+        return this.uvRepository;
+    }
 }

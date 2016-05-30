@@ -1,13 +1,8 @@
 package com.advisorapp.api.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
-import javax.xml.bind.annotation.*;
-import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -58,8 +53,11 @@ public class Semester {
 
     public Semester setStudyPlan(StudyPlan studyPlan) {
         this.studyPlan = studyPlan;
-        this.studyPlan.addSemester(this);
+        if (!this.studyPlan.getSemesters().contains(this)) {
+            this.studyPlan.addSemester(this);
+        }
         this.setNumber(studyPlan.getSemesters().size());
+
         return this;
     }
 

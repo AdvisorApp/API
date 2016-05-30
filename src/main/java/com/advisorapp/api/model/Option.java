@@ -26,5 +26,4 @@ public class Option {
 
         return this;
     }
-
 }
