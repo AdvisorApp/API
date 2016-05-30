@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Service
@@ -33,7 +34,7 @@ public class StudyPlanFactory {
             user.addStudyPlan(
                 studyPlan
                     .setName(name)
-                    .setSemesters(semesters)
+                    .setSemesters(semesters == null ? new HashSet<Semester>() : semesters)
                     .setOption(option)
             )
         );
@@ -51,7 +52,7 @@ public class StudyPlanFactory {
         this.studyPlanService.updateStudyPlan(
             studyPlan
                 .setName(name)
-                .setSemesters(semesters)
+                .setSemesters(semesters == null ? new HashSet<Semester>() : semesters)
                 .setOption(option)
         );
 

@@ -13,7 +13,7 @@ spring:
     password: root
   jpa:
     properties.hibernate.dialect: org.hibernate.dialect.MySQL5Dialect
-    hibernate.ddl-auto: create-drop
+    hibernate.ddl-auto: update
 
 server:
   port: 8090
@@ -42,9 +42,6 @@ info:
     description: ${project.description}
     version: ${project.version}
 
-hotel.service:
-  name: 'default profile:'
-
 ---
 
 spring:
@@ -56,6 +53,3 @@ spring:
 
 spring:
   profiles: test
-
-hotel.service:
-  name: 'test profile:'

@@ -58,7 +58,8 @@ public class Semester {
 
     public Semester setStudyPlan(StudyPlan studyPlan) {
         this.studyPlan = studyPlan;
-        this.setNumber(studyPlan.getSemesters().size() + 1);
+        this.studyPlan.addSemester(this);
+        this.setNumber(studyPlan.getSemesters().size());
         return this;
     }
 

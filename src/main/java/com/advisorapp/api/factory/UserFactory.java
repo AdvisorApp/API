@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Service
@@ -33,7 +34,7 @@ public class UserFactory {
                 .setEmail(email)
                 .setBirthday(birthday)
                 .setRemoteId(remoteId)
-                .setStudyPlans(studyPlans)
+                .setStudyPlans(studyPlans == null ? new HashSet<StudyPlan>() : studyPlans)
         );
     }
 }

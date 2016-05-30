@@ -34,7 +34,7 @@ public class Uv {
     private boolean isAvailableForCart;
 
     @Column(nullable = false)
-    @Range(min = 1)
+    @Range(min = 0)
     private int chs;
 
     @Column(name = "location")

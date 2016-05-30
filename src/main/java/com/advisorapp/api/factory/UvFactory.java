@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Service
@@ -42,8 +43,8 @@ public class UvFactory {
                 .setOption(option)
                 .setLocation(location)
                 .setUvType(uvType)
-                .setCorequisitesUv(corequisites)
-                .setPrerequisitesUv(prerequisites)
+                .setCorequisitesUv(corequisites == null ? new HashSet<Uv>() : corequisites)
+                .setPrerequisitesUv(prerequisites == null ? new HashSet<Uv>() : prerequisites)
         );
     }
 }

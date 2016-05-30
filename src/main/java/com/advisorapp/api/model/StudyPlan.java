@@ -52,8 +52,9 @@ public class StudyPlan implements Serializable {
     }
 
     public StudyPlan addSemester(Semester semester){
+
         this.semesters.add(semester);
-        semester.setStudyPlan(this);
+        //semester.setStudyPlan(this);
 
         return this;
     }
@@ -73,6 +74,11 @@ public class StudyPlan implements Serializable {
     }
 
     public StudyPlan setSemesters(Set<Semester> semesters) {
+        if (semesters == null)
+        {
+            return this;
+        }
+
         this.semesters = semesters;
 
         return this;

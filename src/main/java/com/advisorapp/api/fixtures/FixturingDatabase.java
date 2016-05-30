@@ -32,8 +32,7 @@ public class FixturingDatabase {
         this.references.put("UV_TYPE", new HashMap<>());
     }
 
-    public void run()
-    {
+    public void run() {
         this.destroyDatabase();
         this.initOption();
         this.initUvType();
@@ -42,8 +41,7 @@ public class FixturingDatabase {
         this.initUV();
     }
 
-    protected void destroyDatabase()
-    {
+    protected void destroyDatabase() {
 
     }
 
@@ -52,88 +50,70 @@ public class FixturingDatabase {
         this.addEntry("STUDY_PLAN", "default-study-plan-option-2", this.tankFactory.getStudyPlanFactory().createStudyPlanWithoutUser("Default Study Plan Option 2", null, (Option) this.getEntry("OPTION", "option-2")));
     }
 
-    protected void initSemesters()
-    {
-        for (int i = 1; i <= 9; i++)
-        {
+    protected void initSemesters() {
+        StudyPlan option1 = (StudyPlan) this.getEntry("STUDY_PLAN", "default-study-plan-option-1");
+        StudyPlan option2 = (StudyPlan) this.getEntry("STUDY_PLAN", "default-study-plan-option-2");
+
+        for (int i = 1; i <= 9; i++) {
             this.addEntry(
-                "SEMESTER",
-                semesterKey(i, 1),
-                this.tankFactory.getSemesterFactory().create(
-                    (StudyPlan)this.getEntry("STUDY_PLAN", "default-study-plan-option-1"),
-                    null
-                )
+                    "SEMESTERS",
+                    semesterKey(i, 1),
+                    this.tankFactory.getSemesterFactory().create(option1, null)
             );
             this.addEntry(
-                    "SEMESTER",
+                    "SEMESTERS",
                     semesterKey(i, 2),
-                    this.tankFactory.getSemesterFactory().create(
-                            (StudyPlan)this.getEntry("STUDY_PLAN", "default-study-plan-option-2"),
-                            null
-                    )
+                    this.tankFactory.getSemesterFactory().create(option2, null)
             );
         }
 
         this.addEntry(
-            "SEMESTER",
-            semesterKey(10,1),
-            this.tankFactory.getSemesterFactory().create(
-                (StudyPlan)this.getEntry("STUDY_PLAN", "default-study-plan-option-1"),
-                null
-            )
+                "SEMESTERS",
+                semesterKey(10, 1),
+                this.tankFactory.getSemesterFactory().create(option1, null)
         );
     }
 
-    protected void initOption()
-    {
+    protected void initOption() {
         this.addEntry("OPTION", "option-1", this.tankFactory.getOptionFactory().createOption("Option 1 : Co-op in industry"));
         this.addEntry("OPTION", "option-2", this.tankFactory.getOptionFactory().createOption("Option 2 : Graduation Project"));
     }
 
-    protected void initUvType()
-    {
+    protected void initUvType() {
         this.addEntry("UV_TYPE", "tp", this.tankFactory.getUvTypeFactory().create("TP", 2.5));
         this.addEntry("UV_TYPE", "td", this.tankFactory.getUvTypeFactory().create("TD", 1.0));
     }
 
-    protected String unknown(int number)
-    {
+    protected String unknown(int number) {
         return "unknown-" + number;
     }
 
-    protected Set<Uv> getUvs(String... uvs)
-    {
+    protected Set<Uv> getUvs(String... uvs) {
         Set<Uv> uvSet = new HashSet<>();
-        for(String uv : uvs)
-        {
+        for (String uv : uvs) {
             uvSet.add((Uv) this.getEntry("UV", uv));
         }
         return uvSet;
     }
 
-    protected Set<String> getSet(Set<String> set, String option1, String option2)
-    {
+    protected Set<String> getSet(Set<String> set, String option1, String option2) {
         set.clear();
         set.add(option1);
-        if (option2 != null)
-        {
+        if (option2 != null) {
             set.add(option2);
         }
         return set;
     }
 
-    protected Set<String> getBothOption(Set<String> set, int semester)
-    {
+    protected Set<String> getBothOption(Set<String> set, int semester) {
         return this.getSet(set, semesterKey(semester, 1), semesterKey(semester, 2));
     }
 
-    protected String semesterKey(int semester, int option)
-    {
+    protected String semesterKey(int semester, int option) {
         return "semester-" + semester + "-" + option;
     }
 
-    protected void initUV()
-    {
+    protected void initUV() {
         Set<String> semesters = new HashSet<>();
 
         /// SEMESTRE 1
@@ -205,10 +185,10 @@ public class FixturingDatabase {
         //// NONE
 
         ///SEMESTRE 8 OPTION 2
-        this.createUV("senior-project-1", "Senior Project I", "0405491", false, 8, 1, (Option)this.getEntry("OPTION", "option-2"), Location.DEPARTMENT, false, null, this.getUvs("technical-writing"), this.getSet(semesters, this.semesterKey(8, 2), null));
+        this.createUV("senior-project-1", "Senior Project I", "0405491", false, 8, 1, (Option) this.getEntry("OPTION", "option-2"), Location.DEPARTMENT, false, null, this.getUvs("technical-writing"), this.getSet(semesters, this.semesterKey(8, 2), null));
 
         /// CART SEMESTRE 8 OPTION 2
-        this.createUV("depa-elec-1", "Department Elec. 1", "", true, 8, 3, (Option)this.getEntry("OPTION", "option-2"), Location.DEPARTMENT, false, null, null, this.getSet(semesters, this.semesterKey(8, 2), null));
+        this.createUV("depa-elec-1", "Department Elec. 1", "", true, 8, 3, (Option) this.getEntry("OPTION", "option-2"), Location.DEPARTMENT, false, null, null, this.getSet(semesters, this.semesterKey(8, 2), null));
 
         ///COMMON SEMESTRE 9
         this.createUV("arabic-2", "Arabic 2", "0201101", false, 9, 3, null, Location.UNIVERSITY, false, null, this.getUvs("arabic-1"), this.getBothOption(semesters, 9));
@@ -223,63 +203,59 @@ public class FixturingDatabase {
         /// NONE
 
         ///SEMESTRE 9 OPTION 2
-        this.createUV("senior-project-2", "Senior Project II", "0405492", false, 9, 1, (Option)this.getEntry("OPTION", "option-2"), Location.DEPARTMENT, false, null, this.getUvs("senior-project-1"), this.getSet(semesters, this.semesterKey(9, 2), null));
+        this.createUV("senior-project-2", "Senior Project II", "0405492", false, 9, 1, (Option) this.getEntry("OPTION", "option-2"), Location.DEPARTMENT, false, null, this.getUvs("senior-project-1"), this.getSet(semesters, this.semesterKey(9, 2), null));
 
         ///CART SEMESTRE 9 OPTION 2
-        this.createUV("depa-elec-2", "Department Elec. 2", "", true, 9, 3, (Option)this.getEntry("OPTION", "option-2"), Location.DEPARTMENT, false, null, null, this.getSet(semesters, this.semesterKey(9, 2), null));
+        this.createUV("depa-elec-2", "Department Elec. 2", "", true, 9, 3, (Option) this.getEntry("OPTION", "option-2"), Location.DEPARTMENT, false, null, null, this.getSet(semesters, this.semesterKey(9, 2), null));
 
         /// SEMESTRE 10 OPTION 1
-        this.createUV("coop-industry", "Co-op in Industry", "0405499", false, 10, 7, (Option)this.getEntry("OPTION", "option-1"), Location.DEPARTMENT, false, null, null, this.getSet(semesters, this.semesterKey(10, 1), null));
-
+        this.createUV("coop-industry", "Co-op in Industry", "0405499", false, 10, 7, (Option) this.getEntry("OPTION", "option-1"), Location.DEPARTMENT, false, null, null, this.getSet(semesters, this.semesterKey(10, 1), null));
 
 
     }
 
     protected Uv createUV(
-        String entryName,
-        String name,
-        String remoteId,
-        Boolean isAvailableForCart,
-        Integer minSemester,
-        int chs,
-        Option option,
-        Location location,
-        Boolean isTp,
-        Set<Uv> corequisites,
-        Set<Uv> prerequisites,
-        Set<String> semestersKey
+            String entryName,
+            String name,
+            String remoteId,
+            Boolean isAvailableForCart,
+            Integer minSemester,
+            int chs,
+            Option option,
+            Location location,
+            Boolean isTp,
+            Set<Uv> corequisites,
+            Set<Uv> prerequisites,
+            Set<String> semestersKey
     ) {
 
         Uv uv = this.tankFactory.getUvFactory().createUV(
-            name,
-            "SOME DESCRIPTION",
-            remoteId,
-            isAvailableForCart,
-            minSemester,
-            chs,
-            option,
-            location,
-            (UvType) this.getEntry("UV_TYPE", isTp ? "tp" : "td"),
-            corequisites,
-            prerequisites
+                name,
+                "SOME DESCRIPTION",
+                remoteId,
+                isAvailableForCart,
+                minSemester,
+                chs,
+                option,
+                location,
+                (UvType) this.getEntry("UV_TYPE", isTp ? "tp" : "td"),
+                corequisites,
+                prerequisites
         );
         this.addEntry("UV", entryName, uv);
 
-        for(String semesterKey : semestersKey)
-        {
+        for (String semesterKey : semestersKey) {
             this.tankService.getSemesterService().updateSemester(((Semester) this.getEntry("SEMESTERS", semesterKey)).addUv(uv));
         }
 
         return uv;
     }
 
-    protected void addEntry(String objectType, String key, Object concerned)
-    {
+    protected void addEntry(String objectType, String key, Object concerned) {
         this.references.get(objectType).put(key, concerned);
     }
 
-    protected Object getEntry(String objectType, String key)
-    {
+    protected Object getEntry(String objectType, String key) {
         return this.references.get(objectType).get(key);
     }
 }
