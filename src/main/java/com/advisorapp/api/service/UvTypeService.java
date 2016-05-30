@@ -1,7 +1,6 @@
 package com.advisorapp.api.service;
 
 import com.advisorapp.api.dao.UvTypeRepository;
-import com.advisorapp.api.model.Hotel;
 import com.advisorapp.api.model.UvType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

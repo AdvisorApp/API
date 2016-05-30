@@ -1,8 +1,6 @@
 package com.advisorapp.api.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
@@ -34,7 +32,7 @@ public class Uv {
     private boolean isAvailableForCart;
 
     @Column(nullable = false)
-    @Range(min = 1)
+    @Range(min = 0)
     private int chs;
 
     @Column(name = "location")

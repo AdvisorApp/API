@@ -1,9 +1,8 @@
 package com.advisorapp.api.controller;
 
+import com.advisorapp.api.factory.UvFactory;
 import com.advisorapp.api.model.Uv;
 import com.advisorapp.api.exception.DataFormatException;
-import com.advisorapp.api.model.Uv;
-import com.advisorapp.api.service.UvService;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -19,9 +18,8 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping(value = "/api/uvs")
 @Api(value = "uvs", description = "Uv API")
 public class UvController extends AbstractRestHandler {
-
     @Autowired
-    private UvService uvService;
+    private UvFactory uvFactory;
 
     @RequestMapping(value = "",
             method = RequestMethod.POST,
@@ -31,7 +29,7 @@ public class UvController extends AbstractRestHandler {
     @ApiOperation(value = "Create an uv resource.", notes = "Returns the URL of the new resource in the Location header.")
     public void createUv(@RequestBody Uv uv,
                            HttpServletRequest request, HttpServletResponse response) {
-        Uv createdUv = this.uvService.createUv(uv);
+        Uv createdUv = this.uvFactory.getUvService().createUv(uv);
         response.setHeader("Location", request.getRequestURL().append("/").append(createdUv.getId()).toString());
     }
 
@@ -47,7 +45,7 @@ public class UvController extends AbstractRestHandler {
                            @ApiParam(value = "Tha page size", required = true)
                            @RequestParam(value = "size", required = true, defaultValue = DEFAULT_PAGE_SIZE) Integer size,
                            HttpServletRequest request, HttpServletResponse response) {
-        return this.uvService.getAllUvs(page, size);
+        return this.uvFactory.getUvService().getAllUvs(page, size);
     }
 
     @RequestMapping(value = "/{id}",
@@ -60,7 +58,7 @@ public class UvController extends AbstractRestHandler {
     Uv getUv(@ApiParam(value = "The ID of the uv.", required = true)
                  @PathVariable("id") Long id,
                  HttpServletRequest request, HttpServletResponse response) throws Exception {
-        Uv uv = this.uvService.getUv(id);
+        Uv uv = this.uvFactory.getUvService().getUv(id);
         checkResourceFound(uv);
         //todo: http://goo.gl/6iNAkz
         return uv;
@@ -75,9 +73,9 @@ public class UvController extends AbstractRestHandler {
     public void updateUv(@ApiParam(value = "The ID of the existing uv resource.", required = true)
                            @PathVariable("id") Long id, @RequestBody Uv uv,
                            HttpServletRequest request, HttpServletResponse response) {
-        checkResourceFound(this.uvService.getUv(id));
+        checkResourceFound(this.uvFactory.getUvService().getUv(id));
         if (id != uv.getId()) throw new DataFormatException("ID doesn't match!");
-        this.uvService.updateUv(uv);
+        this.uvFactory.getUvService().updateUv(uv);
     }
 
     //todo: @ApiImplicitParams, @ApiResponses
@@ -89,7 +87,7 @@ public class UvController extends AbstractRestHandler {
     public void deleteUv(@ApiParam(value = "The ID of the existing uv resource.", required = true)
                            @PathVariable("id") Long id, HttpServletRequest request,
                            HttpServletResponse response) {
-        checkResourceFound(this.uvService.getUv(id));
-        this.uvService.deleteUv(id);
+        checkResourceFound(this.uvFactory.getUvService().getUv(id));
+        this.uvFactory.getUvService().deleteUv(id);
     }
 }

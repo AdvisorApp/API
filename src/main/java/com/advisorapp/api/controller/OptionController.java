@@ -1,9 +1,8 @@
 package com.advisorapp.api.controller;
 
+import com.advisorapp.api.factory.OptionFactory;
 import com.advisorapp.api.model.Option;
 import com.advisorapp.api.exception.DataFormatException;
-import com.advisorapp.api.model.Option;
-import com.advisorapp.api.service.OptionService;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -21,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 public class OptionController extends AbstractRestHandler {
 
     @Autowired
-    private OptionService optionService;
+    private OptionFactory optionFactory;
 
     @RequestMapping(value = "",
             method = RequestMethod.POST,
@@ -29,10 +28,8 @@ public class OptionController extends AbstractRestHandler {
             produces = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Create an option resource.", notes = "Returns the URL of the new resource in the Location header.")
-    public void createOption(@RequestBody Option option,
-                           HttpServletRequest request, HttpServletResponse response) {
-        Option createdOption = this.optionService.createOption(option);
-        response.setHeader("Location", request.getRequestURL().append("/").append(createdOption.getId()).toString());
+    public void createOption(@RequestBody Option option, HttpServletRequest request, HttpServletResponse response) {
+        response.setHeader("Location", request.getRequestURL().append("/").append(this.optionFactory.getOptionService().createOption(option).getId()).toString());
     }
 
     @RequestMapping(value = "",
@@ -43,11 +40,11 @@ public class OptionController extends AbstractRestHandler {
     public
     @ResponseBody
     Page<Option> getAllOptions(@ApiParam(value = "The page number (zero-based)", required = true)
-                           @RequestParam(value = "page", required = true, defaultValue = DEFAULT_PAGE_NUM) Integer page,
-                           @ApiParam(value = "Tha page size", required = true)
-                           @RequestParam(value = "size", required = true, defaultValue = DEFAULT_PAGE_SIZE) Integer size,
-                           HttpServletRequest request, HttpServletResponse response) {
-        return this.optionService.getAllOptions(page, size);
+                               @RequestParam(value = "page", required = true, defaultValue = DEFAULT_PAGE_NUM) Integer page,
+                               @ApiParam(value = "Tha page size", required = true)
+                               @RequestParam(value = "size", required = true, defaultValue = DEFAULT_PAGE_SIZE) Integer size,
+                               HttpServletRequest request, HttpServletResponse response) {
+        return this.optionFactory.getOptionService().getAllOptions(page, size);
     }
 
     @RequestMapping(value = "/{id}",
@@ -58,9 +55,9 @@ public class OptionController extends AbstractRestHandler {
     public
     @ResponseBody
     Option getOption(@ApiParam(value = "The ID of the option.", required = true)
-                 @PathVariable("id") Long id,
-                 HttpServletRequest request, HttpServletResponse response) throws Exception {
-        Option option = this.optionService.getOption(id);
+                     @PathVariable("id") Long id,
+                     HttpServletRequest request, HttpServletResponse response) throws Exception {
+        Option option = this.optionFactory.getOptionService().getOption(id);
         checkResourceFound(option);
         //todo: http://goo.gl/6iNAkz
         return option;
@@ -73,11 +70,11 @@ public class OptionController extends AbstractRestHandler {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiOperation(value = "Update a option resource.", notes = "You have to provide a valid option ID in the URL and in the payload. The ID attribute can not be updated.")
     public void updateOption(@ApiParam(value = "The ID of the existing option resource.", required = true)
-                           @PathVariable("id") Long id, @RequestBody Option option,
-                           HttpServletRequest request, HttpServletResponse response) {
-        checkResourceFound(this.optionService.getOption(id));
+                             @PathVariable("id") Long id, @RequestBody Option option,
+                             HttpServletRequest request, HttpServletResponse response) {
+        checkResourceFound(this.optionFactory.getOptionService().getOption(id));
         if (id != option.getId()) throw new DataFormatException("ID doesn't match!");
-        this.optionService.updateOption(option);
+        this.optionFactory.getOptionService().updateOption(option);
     }
 
     //todo: @ApiImplicitParams, @ApiResponses
@@ -87,9 +84,9 @@ public class OptionController extends AbstractRestHandler {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiOperation(value = "Delete a option resource.", notes = "You have to provide a valid option ID in the URL. Once deleted the resource can not be recovered.")
     public void deleteOption(@ApiParam(value = "The ID of the existing option resource.", required = true)
-                           @PathVariable("id") Long id, HttpServletRequest request,
-                           HttpServletResponse response) {
-        checkResourceFound(this.optionService.getOption(id));
-        this.optionService.deleteOption(id);
+                             @PathVariable("id") Long id, HttpServletRequest request,
+                             HttpServletResponse response) {
+        checkResourceFound(this.optionFactory.getOptionService().getOption(id));
+        this.optionFactory.getOptionService().deleteOption(id);
     }
 }
