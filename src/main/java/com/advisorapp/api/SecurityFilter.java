@@ -29,6 +29,7 @@ public class SecurityFilter implements Filter {
     public SecurityFilter() {
         authorizedRoutes.add("/api/auths/token");
         authorizedRoutes.add("/api/auths/signup");
+        authorizedRoutes.add("/api/reset");
     }
 
     @Override

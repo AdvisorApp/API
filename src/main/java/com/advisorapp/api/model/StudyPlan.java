@@ -12,7 +12,7 @@ import java.util.Set;
 public class StudyPlan implements Serializable {
     @Id
     @GeneratedValue
-    private long id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -33,7 +33,14 @@ public class StudyPlan implements Serializable {
         this.semesters = new HashSet<>();
     }
 
-    public long getId() {
+    public StudyPlan setId(Long id)
+    {
+        this.id = id;
+
+        return this;
+    }
+
+    public Long getId() {
         return id;
     }
 
@@ -49,10 +56,9 @@ public class StudyPlan implements Serializable {
     }
 
     public StudyPlan addSemester(Semester semester){
-
-        this.semesters.add(semester);
-        //semester.setStudyPlan(this);
-
+        if (!this.semesters.contains(semester)) {
+            this.semesters.add(semester);
+        }
         return this;
     }
 

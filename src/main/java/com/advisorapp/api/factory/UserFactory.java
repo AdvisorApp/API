@@ -31,29 +31,28 @@ public class UserFactory {
             String email,
             Date birthday,
             String remoteId,
-            Set<StudyPlan> studyPlans
+            String password
 
     ) {
         User user = new User();
 
         return this.createUser(
-            user
-                .setFirstName(firstName)
-                .setLastName(lastName)
-                .setEmail(email)
-                .setBirthday(birthday)
-                .setRemoteId(remoteId)
-                .setStudyPlans(studyPlans == null ? new HashSet<StudyPlan>() : studyPlans)
+                user
+                        .setFirstName(firstName)
+                        .setLastName(lastName)
+                        .setEmail(email)
+                        .setBirthday(birthday)
+                        .setRemoteId(remoteId)
+                        .setPassword(password)
         );
     }
 
-    public User createUser(User user)
-    {
-        user = this.userService.createUser(user);
+    public User createUser(User user) {
+        user = this.userService.signUp(user);
 
         // Create All UvUser for each UVs existing on database.
         Iterator<Uv> uvs = this.uvRepository.findAll().iterator();
-        while(uvs.hasNext()){
+        while (uvs.hasNext()) {
             UvUser uvUser = new UvUser();
             uvUser.setUser(user);
             uvUser.setUv(uvs.next());
@@ -63,13 +62,11 @@ public class UserFactory {
         return user;
     }
 
-    public UserService getUserService()
-    {
+    public UserService getUserService() {
         return userService;
     }
 
-    public UvUserFactory getUvUserFactory()
-    {
+    public UvUserFactory getUvUserFactory() {
         return this.uvUserFactory;
     }
 }

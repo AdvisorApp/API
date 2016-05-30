@@ -28,8 +28,7 @@ public class UvFactory {
         Location location,
         UvType uvType,
         Set<Uv> corequisites,
-        Set<Uv> prerequisites,
-        Set<Semester> semesters
+        Set<Uv> prerequisites
     ) {
         Uv uv = new Uv();
 
@@ -47,11 +46,6 @@ public class UvFactory {
                 .setCorequisitesUv(corequisites == null ? new HashSet<Uv>() : corequisites)
                 .setPrerequisitesUv(prerequisites == null ? new HashSet<Uv>() : prerequisites)
         );
-
-        for (Semester semester : semesters)
-        {
-            this.semesterService.updateSemester(semester.addUv(uv));
-        }
 
         return uv;
     }
