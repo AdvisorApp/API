@@ -5,9 +5,6 @@ import com.advisorapp.api.factory.StudyPlanFactory;
 import com.advisorapp.api.model.Semester;
 import com.advisorapp.api.model.StudyPlan;
 import com.advisorapp.api.exception.DataFormatException;
-import com.advisorapp.api.model.StudyPlan;
-import com.advisorapp.api.service.SemesterService;
-import com.advisorapp.api.service.StudyPlanService;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -16,10 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.Set;
 
 @RestController

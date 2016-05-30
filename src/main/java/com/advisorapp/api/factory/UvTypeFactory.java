@@ -3,7 +3,6 @@ package com.advisorapp.api.factory;
 import com.advisorapp.api.model.UvType;
 import com.advisorapp.api.service.UvTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 @Service

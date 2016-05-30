@@ -2,9 +2,7 @@ package com.advisorapp.api.fixtures;
 
 import com.advisorapp.api.factory.TankFactory;
 import com.advisorapp.api.model.*;
-import com.advisorapp.api.service.TankService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -17,9 +15,6 @@ public class FixturingDatabase {
 
     @Autowired
     private TankFactory tankFactory;
-
-    @Autowired
-    private TankService tankService;
 
     private Map<String, Map<String, Object>> references;
 

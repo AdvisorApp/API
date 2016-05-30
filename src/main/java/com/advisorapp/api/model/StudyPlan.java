@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -47,8 +46,6 @@ public class StudyPlan implements Serializable {
         this.user = user;
 
         return this;
-
-
     }
 
     public StudyPlan addSemester(Semester semester){

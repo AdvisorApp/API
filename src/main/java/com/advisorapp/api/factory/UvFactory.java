@@ -4,7 +4,6 @@ import com.advisorapp.api.model.*;
 import com.advisorapp.api.service.SemesterService;
 import com.advisorapp.api.service.UvService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;

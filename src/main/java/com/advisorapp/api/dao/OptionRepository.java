@@ -1,8 +1,6 @@
 package com.advisorapp.api.dao;
 
 import com.advisorapp.api.model.Option;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 /**

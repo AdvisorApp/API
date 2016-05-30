@@ -1,7 +1,6 @@
 package com.advisorapp.api.controller;
 
 import com.advisorapp.api.fixtures.FixturingDatabase;
-import com.advisorapp.api.model.Option;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

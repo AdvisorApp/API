@@ -1,11 +1,7 @@
 package com.advisorapp.api.model;
 
-import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
-import javax.xml.bind.annotation.*;
-import java.util.Date;
-import java.util.Set;
 
 @Entity
 @Table(name = "uv_types")

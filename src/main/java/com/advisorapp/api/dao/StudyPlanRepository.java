@@ -1,7 +1,6 @@
 package com.advisorapp.api.dao;
 
 import com.advisorapp.api.model.StudyPlan;
-import com.advisorapp.api.model.User;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 /**

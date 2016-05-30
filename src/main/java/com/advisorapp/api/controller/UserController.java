@@ -1,6 +1,5 @@
 package com.advisorapp.api.controller;
 
-import com.advisorapp.api.dao.UvRepository;
 import com.advisorapp.api.factory.StudyPlanFactory;
 import com.advisorapp.api.factory.UserFactory;
 import com.advisorapp.api.factory.UvFactory;
@@ -8,22 +7,16 @@ import com.advisorapp.api.factory.UvUserFactory;
 import com.advisorapp.api.model.*;
 import com.advisorapp.api.exception.DataFormatException;
 import com.advisorapp.api.model.User;
-import com.advisorapp.api.service.StudyPlanService;
-import com.advisorapp.api.service.UserService;
-import com.advisorapp.api.service.UvService;
-import com.advisorapp.api.service.UvUserService;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Iterator;
 import java.util.Set;
 
 @RestController

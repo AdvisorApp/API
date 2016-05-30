@@ -3,8 +3,6 @@ package com.advisorapp.api.controller;
 import com.advisorapp.api.factory.UvTypeFactory;
 import com.advisorapp.api.model.UvType;
 import com.advisorapp.api.exception.DataFormatException;
-import com.advisorapp.api.model.UvType;
-import com.advisorapp.api.service.UvTypeService;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
