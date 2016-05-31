@@ -56,12 +56,12 @@ public class UserController extends AbstractRestHandler {
     @ApiOperation(value = "Get connected user information", notes = "Returns the information of user that corresponds to the JWT")
     public
     @ResponseBody
-    Page<User> getAllUsers(@ApiParam(value = "The page number (zero-based)", required = true)
-                           @RequestParam(value = "page", required = true, defaultValue = DEFAULT_PAGE_NUM) Integer page,
-                           @ApiParam(value = "Tha page size", required = true)
-                           @RequestParam(value = "size", required = true, defaultValue = DEFAULT_PAGE_SIZE) Integer size,
-                           HttpServletRequest request, HttpServletResponse response) {
-        return this.userFactory.getUserService().getAllUsers(page, size);
+    User getMe(@ApiParam(value = "The page number (zero-based)", required = true)
+                     @RequestParam(value = "page", required = true, defaultValue = DEFAULT_PAGE_NUM) Integer page,
+                     @ApiParam(value = "Tha page size", required = true)
+                     @RequestParam(value = "size", required = true, defaultValue = DEFAULT_PAGE_SIZE) Integer size,
+                     SecuredRequest request, HttpServletResponse response) {
+        return request.getUser();
     }
 
 

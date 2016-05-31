@@ -83,6 +83,7 @@ public class SemesterController extends AbstractRestHandler {
                            @PathVariable("id") Long id, HttpServletRequest request,
                            HttpServletResponse response) {
         checkResourceFound(this.semesterFactory.getSemesterService().getSemester(id));
+
         this.semesterFactory.getSemesterService().deleteSemester(id);
     }
 
@@ -95,9 +96,12 @@ public class SemesterController extends AbstractRestHandler {
     @ApiOperation(value = "Get SP's semesters.", notes = "You have to provide a valid Semester ID.")
     public
     @ResponseBody
-    Set<Uv> getSemesterBySP(@ApiParam(value = "The ID of the Semester.", required = true)
-                                  @PathVariable("id") Long id,
-                            HttpServletRequest request, HttpServletResponse response) throws Exception {
+    Set<Uv> getUvBySemester(
+            @ApiParam(value = "The ID of the Semester.", required = true)
+            @PathVariable("id") Long id,
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) throws Exception {
         Semester semester = this.semesterFactory.getSemesterService().getSemester(id);
         checkResourceFound(semester);
         return semester.getUvs();
