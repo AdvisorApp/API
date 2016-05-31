@@ -62,7 +62,7 @@ public class SemesterService {
     public Set<String> handleAddUv(Semester semester, Uv uv) {
         Set<String> errors = new HashSet<>();
         StudyPlan studyPlan = semester.getStudyPlan();
-        
+
         if (studyPlan.containUv(uv)) {
             errors.add("The current study plan already contains the UV");
         }

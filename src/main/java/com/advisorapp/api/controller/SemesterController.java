@@ -131,7 +131,13 @@ public class SemesterController extends AbstractRestHandler {
         Uv uv = this.uvFactory.getUvService().getUv(uvId);
         checkResourceFound(uv);
 
-        return this.semesterFactory.getSemesterService().handleAddUv(semester, uv);
+        Set<String> errors = this.semesterFactory.getSemesterService().handleAddUv(semester, uv);
+        if (errors.size() == 0)
+        {
+            return errors;
+        }
+
+        throw new IllegalArgumentException(errors.stream().reduce("", (acc, el) -> acc + el.toString() + "//"));
     }
 
 
