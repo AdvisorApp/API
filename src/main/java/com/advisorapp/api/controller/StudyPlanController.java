@@ -28,9 +28,6 @@ public class StudyPlanController extends AbstractRestHandler {
     private StudyPlanFactory studyPlanFactory;
 
     @Autowired
-    private StudyPlanService studyPlanService;
-
-    @Autowired
     private SemesterFactory semesterFactory;
 
     @RequestMapping(value = "",
@@ -138,7 +135,7 @@ public class StudyPlanController extends AbstractRestHandler {
                               HttpServletRequest request, HttpServletResponse response) throws Exception {
         StudyPlan studyPlan = this.studyPlanFactory.getStudyPlanService().getStudyPlan(id);
         checkResourceFound(studyPlan);
-        return studyPlanService.getSPNotChosenUVs(id);
+        return studyPlanFactory.getStudyPlanService().getSPNotChosenUVs(id);
     }
 
     @RequestMapping(value = "/{id}/remainingUvs/cart",
@@ -153,7 +150,7 @@ public class StudyPlanController extends AbstractRestHandler {
                               HttpServletRequest request, HttpServletResponse response) throws Exception {
         StudyPlan studyPlan = this.studyPlanFactory.getStudyPlanService().getStudyPlan(id);
         checkResourceFound(studyPlan);
-        return studyPlanService.getSPCartNotChosenUVs(id);
+        return studyPlanFactory.getStudyPlanService().getSPCartNotChosenUVs(id);
     }
 
 
