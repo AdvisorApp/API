@@ -72,13 +72,6 @@ public class StudyPlanService {
         Set<Uv> uvsNotChosen = new HashSet<>();
 
         for (Uv uv : uvs) {
-            if (studyPlan.getOption() != null && uv.getOption() != null)
-            {
-                if (studyPlan.getOption().getId() != uv.getOption().getId())
-                {
-                    continue;
-                }
-            }
             boolean uvChosen = false;
             for (Semester semester : semesters) {
                 if (semester.getUvs().contains(uv)) {
@@ -90,15 +83,5 @@ public class StudyPlanService {
         }
 
         return uvsNotChosen;
-    }
-
-    //http://goo.gl/7fxvVf
-    public Page<StudyPlan> getAllStudyPlans(Integer page, Integer size) {
-        Page pageOfStudyPlans = studyPlanRepository.findAll(new PageRequest(page, size));
-        // example of adding to the /metrics
-        if (size > 50) {
-            counterService.increment("advisorapp.StudyPlanService.getAll.largePayload");
-        }
-        return pageOfStudyPlans;
     }
 }

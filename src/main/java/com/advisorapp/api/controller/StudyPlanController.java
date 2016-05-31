@@ -30,21 +30,6 @@ public class StudyPlanController extends AbstractRestHandler {
     @Autowired
     private SemesterFactory semesterFactory;
 
-    @RequestMapping(value = "",
-            method = RequestMethod.GET,
-            produces = "application/json")
-    @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Get a paginated list of all studyPlans.", notes = "The list is paginated. You can provide a page number (default 0) and a page size (default 100)")
-    public
-    @ResponseBody
-    Page<StudyPlan> getAllStudyPlans(@ApiParam(value = "The page number (zero-based)", required = true)
-                                     @RequestParam(value = "page", required = true, defaultValue = DEFAULT_PAGE_NUM) Integer page,
-                                     @ApiParam(value = "Tha page size", required = true)
-                                     @RequestParam(value = "size", required = true, defaultValue = DEFAULT_PAGE_SIZE) Integer size,
-                                     HttpServletRequest request, HttpServletResponse response) {
-        return this.studyPlanFactory.getStudyPlanService().getAllStudyPlans(page, size);
-    }
-
     @RequestMapping(value = "/{id}",
             method = RequestMethod.GET,
             produces = {"application/json", "application/xml"})
