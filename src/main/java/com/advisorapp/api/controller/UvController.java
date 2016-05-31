@@ -90,4 +90,6 @@ public class UvController extends AbstractRestHandler {
         checkResourceFound(this.uvFactory.getUvService().getUv(id));
         this.uvFactory.getUvService().deleteUv(id);
     }
+
+
 }
