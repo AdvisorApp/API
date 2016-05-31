@@ -5,6 +5,8 @@ import com.advisorapp.api.factory.StudyPlanFactory;
 import com.advisorapp.api.model.Semester;
 import com.advisorapp.api.model.StudyPlan;
 import com.advisorapp.api.exception.DataFormatException;
+import com.advisorapp.api.model.Uv;
+import com.advisorapp.api.service.StudyPlanService;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -24,6 +26,9 @@ public class StudyPlanController extends AbstractRestHandler {
 
     @Autowired
     private StudyPlanFactory studyPlanFactory;
+
+    @Autowired
+    private StudyPlanService studyPlanService;
 
     @Autowired
     private SemesterFactory semesterFactory;
@@ -118,4 +123,23 @@ public class StudyPlanController extends AbstractRestHandler {
 
         return this.semesterFactory.create(attachedSP, semester);
     }
+
+    // ----- SP's uvs requests handler
+
+    @RequestMapping(value = "/{id}/remainingUvs",
+            method = RequestMethod.GET,
+            produces = {"application/json"})
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get SP's not chosen UVs.", notes = "You have to provide a valid SP ID.")
+    public
+    @ResponseBody
+    Set<Uv> getSpUvsNotChosen(@ApiParam(value = "The ID of the SP.", required = true)
+                                  @PathVariable("id") Long id,
+                              HttpServletRequest request, HttpServletResponse response) throws Exception {
+        StudyPlan studyPlan = this.studyPlanFactory.getStudyPlanService().getStudyPlan(id);
+        checkResourceFound(studyPlan);
+        return studyPlanService.getSPNotChosenUVs(id);
+    }
+
+
 }

@@ -10,8 +10,10 @@ import javax.servlet.*;
  */
 @Configuration
 public class SecurityConfig {
+    /**
     @Bean
     public Filter securityFilter() {
         return new SecurityFilter();
     }
+    */
 }
