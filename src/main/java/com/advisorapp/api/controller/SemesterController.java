@@ -110,7 +110,7 @@ public class SemesterController extends AbstractRestHandler {
     }
 
     @RequestMapping(value = "/{semester_id}/uv/{uv_id}",
-            method = RequestMethod.GET,
+            method = RequestMethod.PUT,
             produces = {"application/json"})
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Add an uv to a semester", notes = "You have to provide a valid Semester ID and an UV id.")
