@@ -73,6 +73,24 @@ public class StudyPlanService {
         return uvsNotChosen;
     }
 
+    public Set<Uv> getSPCartNotChosenUVs(long id) {
+        Set<Uv> uvsNotChosen = new HashSet<>();
+        StudyPlan sp = studyPlanRepository.findOne(id);
+        Set<Semester> semesters = sp.getSemesters();
+
+        // Create All UvUser for each UVs existing on database.
+        Iterable<Uv> uvs = this.uvRepository.findByAvailableForCart();
+        for (Uv uv : uvs){
+            boolean uvChosen = false;
+            for(Semester semester : semesters){
+                if (semester.getUvs().contains(uv)) uvChosen = true;
+            }
+            if(!uvChosen) uvsNotChosen.add(uv);
+        }
+
+        return uvsNotChosen;
+    }
+
     //http://goo.gl/7fxvVf
     public Page<StudyPlan> getAllStudyPlans(Integer page, Integer size) {
         Page pageOfStudyPlans = studyPlanRepository.findAll(new PageRequest(page, size));

@@ -141,5 +141,20 @@ public class StudyPlanController extends AbstractRestHandler {
         return studyPlanService.getSPNotChosenUVs(id);
     }
 
+    @RequestMapping(value = "/{id}/remainingUvs/cart",
+            method = RequestMethod.GET,
+            produces = {"application/json"})
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get SP's not chosen cart UVs.", notes = "You have to provide a valid SP ID.")
+    public
+    @ResponseBody
+    Set<Uv> getSpCartUvsNotChosen(@ApiParam(value = "The ID of the SP.", required = true)
+                              @PathVariable("id") Long id,
+                              HttpServletRequest request, HttpServletResponse response) throws Exception {
+        StudyPlan studyPlan = this.studyPlanFactory.getStudyPlanService().getStudyPlan(id);
+        checkResourceFound(studyPlan);
+        return studyPlanService.getSPCartNotChosenUVs(id);
+    }
+
 
 }
