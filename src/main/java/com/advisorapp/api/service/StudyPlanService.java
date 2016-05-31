@@ -13,6 +13,7 @@ import org.springframework.boot.actuate.metrics.CounterService;
 import org.springframework.boot.actuate.metrics.GaugeService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -56,36 +57,36 @@ public class StudyPlanService {
     }
 
     public Set<Uv> getSPNotChosenUVs(long id) {
-        Set<Uv> uvsNotChosen = new HashSet<>();
         StudyPlan sp = studyPlanRepository.findOne(id);
-        Set<Semester> semesters = sp.getSemesters();
 
-        // Create All UvUser for each UVs existing on database.
-        Iterable<Uv> uvs = this.uvRepository.findAll();
-        for (Uv uv : uvs){
-            boolean uvChosen = false;
-            for(Semester semester : semesters){
-                if (semester.getUvs().contains(uv)) uvChosen = true;
-            }
-            if(!uvChosen) uvsNotChosen.add(uv);
-        }
-
-        return uvsNotChosen;
+        return this.getRemainingUvOnList(sp.getSemesters(), this.uvRepository.findAll(), sp);
     }
 
     public Set<Uv> getSPCartNotChosenUVs(long id) {
-        Set<Uv> uvsNotChosen = new HashSet<>();
         StudyPlan sp = studyPlanRepository.findOne(id);
-        Set<Semester> semesters = sp.getSemesters();
 
-        // Create All UvUser for each UVs existing on database.
-        Iterable<Uv> uvs = this.uvRepository.findByAvailableForCart();
-        for (Uv uv : uvs){
-            boolean uvChosen = false;
-            for(Semester semester : semesters){
-                if (semester.getUvs().contains(uv)) uvChosen = true;
+        return this.getRemainingUvOnList(sp.getSemesters(), this.uvRepository.findByAvailableForCart(), sp);
+    }
+
+    public Set<Uv> getRemainingUvOnList(Set<Semester> semesters, Iterable<Uv> uvs, StudyPlan studyPlan) {
+        Set<Uv> uvsNotChosen = new HashSet<>();
+
+        for (Uv uv : uvs) {
+            if (studyPlan.getOption() != null && uv.getOption() != null)
+            {
+                if (studyPlan.getOption().getId() != uv.getOption().getId())
+                {
+                    continue;
+                }
             }
-            if(!uvChosen) uvsNotChosen.add(uv);
+            boolean uvChosen = false;
+            for (Semester semester : semesters) {
+                if (semester.getUvs().contains(uv)) {
+                    uvChosen = true;
+                    break;
+                }
+            }
+            if (!uvChosen) uvsNotChosen.add(uv);
         }
 
         return uvsNotChosen;

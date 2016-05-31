@@ -4,6 +4,8 @@ import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
 import java.util.Set;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "semesters")
@@ -17,7 +19,7 @@ public class Semester {
     @Range(min = 1)
     private int number;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "study_plan_id", nullable = false)
     private StudyPlan studyPlan;
 
@@ -61,10 +63,21 @@ public class Semester {
         return this;
     }
 
+    public int getTotalChs()
+    {
+        return this.uvs.stream().collect(Collectors.summingInt( Uv::getChs ));
+    }
+
 
     public Semester addUv(Uv uv){
         this.uvs.add(uv);
         uv.addSemester(this);
+
+        //TODO add its corequisites and prerequisites
+
+        if (uv.getOption() != null) {
+            this.getStudyPlan().setOption(uv.getOption());
+        }
 
         return this;
     }
