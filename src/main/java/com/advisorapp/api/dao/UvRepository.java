@@ -16,4 +16,7 @@ public interface UvRepository extends PagingAndSortingRepository<Uv,Long> {
 
     @Query("SELECT u FROM Uv u WHERE u.option IS NULL and u.minSemester = :minSemester")
     Set<Uv> findByMinSemesterAndWithoutOption(@Param("minSemester") int minSemester);
+
+    @Query("SELECT u FROM Uv u WHERE u.isAvailableForCart = true")
+    Set<Uv> findByAvailableForCart();
 }

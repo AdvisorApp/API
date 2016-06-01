@@ -23,7 +23,6 @@ public class SecurityFilter implements Filter {
 
     private final String HEADER_NAME = "X-Authorization";
 
-
     private Set<String> authorizedRoutes = new HashSet<>();
 
     public SecurityFilter() {
@@ -36,17 +35,16 @@ public class SecurityFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         try {
             HttpServletRequest request = (HttpServletRequest) servletRequest;
+
             if(shouldIFilter(request)) {
                 System.out.println("No filter this request");
-                filterChain.doFilter(
-                        servletRequest,
-                        servletResponse
-                );
-            }else{
-                boolean ok = processTokenCheck(servletResponse, filterChain, request);
-                if(! ok) {
-                    sendUnauthorizedResponse((HttpServletResponse) servletResponse);
-                }
+                filterChain.doFilter(servletRequest, servletResponse);
+
+                return;
+            }
+
+            if(!processTokenCheck(servletResponse, filterChain, request)) {
+                sendUnauthorizedResponse((HttpServletResponse) servletResponse);
             }
         } catch (Exception e) {
             System.err.println("SecurityFilter error : " + e.getMessage());
@@ -55,24 +53,22 @@ public class SecurityFilter implements Filter {
     }
 
     private boolean processTokenCheck(ServletResponse servletResponse, FilterChain filterChain, HttpServletRequest request) throws IOException, ServletException {
-        boolean ok = false;
         String token = request.getHeader(HEADER_NAME);
         if (token != null) {
             Optional<User> userOpt = authenticationService.verifyToken(token);
             if(userOpt.isPresent()){
-                ok = true;
                 filterChain.doFilter(
                         new SecuredRequest(request, userOpt.get()),
                         servletResponse
                 );
+                return true;
             }
         }
-        return ok;
+        return false;
     }
 
     private boolean shouldIFilter(HttpServletRequest request) {
-        String url = request.getServletPath();
-        return authorizedRoutes.contains(url);
+        return authorizedRoutes.contains(request.getServletPath());
     }
 
 

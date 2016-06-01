@@ -69,7 +69,6 @@ public class AuthController extends AbstractRestHandler {
     public void signUp(@RequestBody User user,
                 HttpServletRequest request, HttpServletResponse response) {
         userService.signUp(user);
-
     }
 
 }

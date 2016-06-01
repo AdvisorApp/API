@@ -97,6 +97,53 @@ public class StudyPlan implements Serializable {
         return this;
     }
 
+    public boolean containUv(Uv concernedUv) {
+        return this.getUvs().stream().anyMatch(uv -> uv.getId() == concernedUv.getId());
+    }
+
+    public boolean containCorequisite(Uv concernedUv)
+    {
+        Set<Uv> corequisites = concernedUv.getCorequisitesUv();
+        if (corequisites.size() == 0)
+        {
+            return true;
+        }
+
+        for (Uv corequisite : corequisites)
+        {
+            if (!this.containUv(corequisite))
+                return false;
+        }
+
+        return true;
+    }
+
+    public boolean containPrerequisite(Uv concernedUv)
+    {
+        Set<Uv> prerequisites = concernedUv.getPrerequisitesUv();
+        if (prerequisites.size() == 0)
+        {
+            return true;
+        }
+
+        for (Uv prerequisite : prerequisites)
+        {
+            if (!this.containUv(prerequisite))
+                return false;
+        }
+
+        return true;
+    }
+
+
+    protected Set<Uv> getUvs()
+    {
+        Set<Uv> uvs = new HashSet<>();
+        semesters.stream().forEach(e -> uvs.addAll(e.getUvs()));
+
+        return uvs;
+    }
+
     @Override
     public String toString() {
         return "StudyPlan{" +
