@@ -1,13 +1,18 @@
 package com.advisorapp.api.controller;
 
+import com.advisorapp.api.SecuredRequest;
 import com.advisorapp.api.model.RestErrorInfo;
 import com.advisorapp.api.exception.DataFormatException;
 import com.advisorapp.api.exception.ResourceNotFoundException;
+import com.advisorapp.api.model.Semester;
+import com.advisorapp.api.model.StudyPlan;
+import com.advisorapp.api.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -59,6 +64,24 @@ public abstract class AbstractRestHandler implements ApplicationEventPublisherAw
             throw new ResourceNotFoundException("resource not found");
         }
         return resource;
+    }
+
+    //TODO USE THIS
+    public void verifyAccess(final Object resourceToAccess, User user) {
+        if (resourceToAccess instanceof Semester)
+        {
+            if (((Semester)resourceToAccess).getStudyPlan().getUser().getId() != user.getId())
+                throw new BadCredentialsException("You don't have access to this semester");
+
+            return;
+        }
+        if (resourceToAccess instanceof StudyPlan)
+        {
+            if (((StudyPlan)resourceToAccess).getUser().getId() != user.getId())
+                throw new BadCredentialsException("You don't have access to this studyPlan");
+
+            return;
+        }
     }
 
 }

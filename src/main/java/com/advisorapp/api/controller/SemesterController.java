@@ -1,6 +1,8 @@
 package com.advisorapp.api.controller;
 
+import com.advisorapp.api.SecuredRequest;
 import com.advisorapp.api.factory.SemesterFactory;
+import com.advisorapp.api.factory.UvFactory;
 import com.advisorapp.api.model.Semester;
 import com.advisorapp.api.exception.DataFormatException;
 import com.advisorapp.api.model.Uv;
@@ -16,9 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Set;
 
-/*
- * Demonstrates how to set up RESTful API endpoints using Spring MVC
- */
 
 @RestController
 @RequestMapping(value = "/api/semesters")
@@ -27,6 +26,9 @@ public class SemesterController extends AbstractRestHandler {
 
     @Autowired
     private SemesterFactory semesterFactory;
+
+    @Autowired
+    private UvFactory uvFactory;
 
     @RequestMapping(value = "",
             method = RequestMethod.GET,
@@ -52,7 +54,7 @@ public class SemesterController extends AbstractRestHandler {
     @ResponseBody
     Semester getSemester(@ApiParam(value = "The ID of the semester.", required = true)
                  @PathVariable("id") Long id,
-                 HttpServletRequest request, HttpServletResponse response) throws Exception {
+                 SecuredRequest request, HttpServletResponse response) throws Exception {
         Semester semester = this.semesterFactory.getSemesterService().getSemester(id);
         checkResourceFound(semester);
         //todo: http://goo.gl/6iNAkz
@@ -106,5 +108,37 @@ public class SemesterController extends AbstractRestHandler {
         checkResourceFound(semester);
         return semester.getUvs();
     }
+
+    @RequestMapping(value = "/{semester_id}/uv/{uv_id}",
+            method = RequestMethod.PUT,
+            produces = {"application/json"})
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Add an uv to a semester", notes = "You have to provide a valid Semester ID and an UV id.")
+    public
+    @ResponseBody
+    Set<String> addUvToSemester(
+            @ApiParam(value = "The ID of the Semester.", required = true)
+            @PathVariable("semester_id") Long semesterId,
+            @ApiParam(value = "The Id of the uv.", required = true)
+            @PathVariable("uv_id") Long uvId,
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) throws Exception {
+
+        Semester semester = this.semesterFactory.getSemesterService().getSemester(semesterId);
+        checkResourceFound(semester);
+
+        Uv uv = this.uvFactory.getUvService().getUv(uvId);
+        checkResourceFound(uv);
+
+        Set<String> errors = this.semesterFactory.getSemesterService().handleAddUv(semester, uv);
+        if (errors.size() == 0)
+        {
+            return errors;
+        }
+
+        throw new IllegalArgumentException(errors.stream().reduce("", (acc, el) -> acc + el.toString() + "//"));
+    }
+
 
 }
