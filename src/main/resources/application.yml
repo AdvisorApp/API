@@ -61,10 +61,6 @@ security:
 privateKey: "53026072618764933cee4f10b559047cccbba4fc1cee4f10b5590NANOULEBGDU4447cccbba4fc1530260726187649"
 salt: "$2a$10$xhBhvrl/hpu0HaLIYNQmcO"
 
-  security:
-    basic:
-      enabled: false
-
 ---
 
 spring:
