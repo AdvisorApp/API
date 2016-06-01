@@ -31,6 +31,9 @@ public class UvUser {
     @Column(name = "uv_comment")
     private String uvComment;
 
+    @Column(name = "teacher_comment")
+    private String teacherComment;
+
 
     public long getId() {
         return id;
@@ -82,6 +85,16 @@ public class UvUser {
 
     public UvUser setUvComment(String uvComment) {
         this.uvComment = uvComment;
+
+        return this;
+    }
+
+    public String getTeacherComment() {
+        return teacherComment;
+    }
+
+    public UvUser setTeacherComment(String teacherComment) {
+        this.teacherComment = teacherComment;
 
         return this;
     }

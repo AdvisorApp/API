@@ -5,8 +5,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class TankFactory {
-    @Autowired
-    private OptionFactory optionFactory;
 
     @Autowired
     private SemesterFactory semesterFactory;
@@ -28,10 +26,6 @@ public class TankFactory {
 
     public UserFactory getUserFactory() {
         return userFactory;
-    }
-
-    public OptionFactory getOptionFactory() {
-        return optionFactory;
     }
 
     public StudyPlanFactory getStudyPlanFactory() {

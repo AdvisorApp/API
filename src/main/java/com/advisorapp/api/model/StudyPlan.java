@@ -25,10 +25,6 @@ public class StudyPlan implements Serializable {
     @JsonIgnore
     private Set<Semester> semesters;
 
-    @ManyToOne
-    @JoinColumn(name = "option_id")
-    private Option option;
-
     public StudyPlan() {
         this.semesters = new HashSet<>();
     }
@@ -87,16 +83,6 @@ public class StudyPlan implements Serializable {
         return this;
     }
 
-    public Option getOption() {
-        return option;
-    }
-
-    public StudyPlan setOption(Option option) {
-        this.option = option;
-
-        return this;
-    }
-
     public boolean containUv(Uv concernedUv) {
         return this.getUvs().stream().anyMatch(uv -> uv.getId() == concernedUv.getId());
     }
@@ -151,7 +137,6 @@ public class StudyPlan implements Serializable {
                 ", user=" + user +
                 ", name='" + name + '\'' +
                 ", semesters=" + semesters +
-                ", option=" + option +
                 '}';
     }
 }

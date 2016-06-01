@@ -75,10 +75,6 @@ public class Semester {
 
         //TODO add its corequisites and prerequisites
 
-        if (uv.getOption() != null) {
-            this.getStudyPlan().setOption(uv.getOption());
-        }
-
         return this;
     }
 

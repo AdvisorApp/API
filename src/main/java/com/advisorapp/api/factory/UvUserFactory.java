@@ -17,7 +17,8 @@ public class UvUserFactory {
         Uv uv,
         Double userAverage,
         Double uvMark,
-        String uvComment
+        String uvComment,
+        String teacherComment
     ) {
         UvUser uvUser = new UvUser();
 
@@ -28,6 +29,7 @@ public class UvUserFactory {
                 .setUserAverage(userAverage)
                 .setUvMark(uvMark)
                 .setUvComment(uvComment)
+                .setTeacherComment(teacherComment)
         );
     }
 
