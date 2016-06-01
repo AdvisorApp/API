@@ -72,13 +72,6 @@ public class StudyPlanService {
         Set<Uv> uvsNotChosen = new HashSet<>();
 
         for (Uv uv : uvs) {
-            if (studyPlan.getOption() != null && uv.getOption() != null)
-            {
-                if (studyPlan.getOption().getId() != uv.getOption().getId())
-                {
-                    continue;
-                }
-            }
             boolean uvChosen = false;
             for (Semester semester : semesters) {
                 if (semester.getUvs().contains(uv)) {

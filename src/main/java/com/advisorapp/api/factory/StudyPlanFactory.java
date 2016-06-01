@@ -1,7 +1,5 @@
 package com.advisorapp.api.factory;
 
-import com.advisorapp.api.dao.OptionRepository;
-import com.advisorapp.api.model.Option;
 import com.advisorapp.api.model.Semester;
 import com.advisorapp.api.model.StudyPlan;
 import com.advisorapp.api.model.User;
@@ -23,15 +21,11 @@ public class StudyPlanFactory {
     private StudyPlanService studyPlanService;
 
     @Autowired
-    private  OptionRepository optionRepository;
-
-    @Autowired
     private SemesterFactory semesterFactory;
 
     public StudyPlan createStudyPlan(
             String name,
             Set<Semester> semesters,
-            Option option,
             User user
     ) {
         StudyPlan studyPlan = new StudyPlan();
@@ -40,7 +34,6 @@ public class StudyPlanFactory {
             studyPlan
                 .setName(name)
                 .setSemesters(semesters == null ? new HashSet<Semester>() : semesters)
-                .setOption(option)
         );
 
         return this.createStudyPlanWithUser(studyPlan, user);
@@ -59,9 +52,7 @@ public class StudyPlanFactory {
 
     public void createDefaultStudyPlanForUser(User user) {
         String userKey = (user != null ? user.getFirstName() + " " : "");
-        this.semesterFactory.initDefaultSemesters(this.createStudyPlan(userKey +  "Default Study Plan Option 1", null, this.optionRepository.findByName("Option 1 : Co-op in industry"), user));
-
-        this.semesterFactory.initDefaultSemesters(this.createStudyPlan(userKey + "Default Study Plan Option 2", null, this.optionRepository.findByName("Option 2 : Graduation Project"), user));
+        this.semesterFactory.initDefaultSemesters(this.createStudyPlan(userKey +  "Default Study Plan", null, user));
     }
 
     public StudyPlanService getStudyPlanService()

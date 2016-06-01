@@ -22,11 +22,10 @@ public class Uv {
     private String name;
 
     @Column()
-    private String description;
+    private String teacherName;
 
-    @Column(nullable = false)
-    @Range(min = 1)
-    private int minSemester;
+    @Column()
+    private String description;
 
     @Column(name = "is_available_for_cart",nullable = false)
     private boolean isAvailableForCart;
@@ -37,10 +36,6 @@ public class Uv {
 
     @Column(name = "location")
     private Location location;
-
-    @ManyToOne
-    @JoinColumn(name = "option_id", nullable = true)
-    private Option option;
 
     @ManyToOne
     @JoinColumn(name = "uv_type_id",nullable = false)
@@ -109,16 +104,6 @@ public class Uv {
 
     public Uv setDescription(String description) {
         this.description = description;
-
-        return this;
-    }
-
-    public int getMinSemester() {
-        return minSemester;
-    }
-
-    public Uv setMinSemester(int minSemester) {
-        this.minSemester = minSemester;
 
         return this;
     }
@@ -238,16 +223,6 @@ public class Uv {
     public Uv addPrerequisite(Uv prerequisite)
     {
         this.prerequisitesUv.add(prerequisite);
-
-        return this;
-    }
-
-    public Option getOption() {
-        return option;
-    }
-
-    public Uv setOption(Option option) {
-        this.option = option;
 
         return this;
     }

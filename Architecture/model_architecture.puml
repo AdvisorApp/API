@@ -32,20 +32,14 @@ id
 remoteId
 name
 description
-minSemester
 isAvailableForCard
 chs
+profName
 }
 
 object studyPlans {
 id
 name
-}
-
-object options {
-id
-name
-
 }
 
 object semesters {
@@ -67,8 +61,6 @@ uvUser "*" -- "1" users : user
 uvUser  "*" -- "1" uvs : uv
 
 users "0,1" -- "*" studyPlans : user
-studyPlans "*" -- "0,1" options : option
-options "0,1" -- "*" uvs : option
 studyPlans "1" -- "*" semesters : studyplan
 semesters "*" -- "*" uvs
 
