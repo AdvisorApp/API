@@ -19,4 +19,5 @@ public interface UvRepository extends PagingAndSortingRepository<Uv,Long> {
 
     @Query("SELECT u FROM Uv u WHERE u.isAvailableForCart = true")
     Set<Uv> findByAvailableForCart();
+
 }

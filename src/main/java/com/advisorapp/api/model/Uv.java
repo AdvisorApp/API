@@ -199,6 +199,16 @@ public class Uv {
         return this;
     }
 
+    @JsonIgnore
+    public Set<Uv> getRealCorequisites()
+    {
+        Set<Uv> corequisitesUVs = new HashSet<>();
+        corequisitesUVs.addAll(this.getCorequisitesUv());
+        corequisitesUVs.addAll(this.getCorequisitesUvOf());
+        return corequisitesUVs;
+    }
+
+    /**
     public Set<Uv> getRealCorequisites(Set<Uv> managedCorequisites, Set<Uv> realCorequisites)
     {
         return this.getRealCorequisites(this, managedCorequisites, realCorequisites);
@@ -220,6 +230,7 @@ public class Uv {
 
         return realCorequisites;
     }
+     */
 
     public Set<Uv> getCorequisitesUvOf() {
         return corequisitesUvOf;
