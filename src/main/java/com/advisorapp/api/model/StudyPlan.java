@@ -4,8 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "study_plans")
@@ -21,8 +20,9 @@ public class StudyPlan implements Serializable {
     @Column
     private String name;
 
-    @OneToMany(mappedBy = "studyPlan", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "studyPlan", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
+    @OrderBy("number ASC ")
     private Set<Semester> semesters;
 
     public StudyPlan() {
@@ -69,6 +69,7 @@ public class StudyPlan implements Serializable {
     }
 
     public Set<Semester> getSemesters() {
+
         return semesters;
     }
 
@@ -121,12 +122,9 @@ public class StudyPlan implements Serializable {
         return true;
     }
 
-
-    protected Set<Uv> getUvs()
-    {
+    protected Set<Uv> getUvs() {
         Set<Uv> uvs = new HashSet<>();
         semesters.stream().forEach(e -> uvs.addAll(e.getUvs()));
-
         return uvs;
     }
 

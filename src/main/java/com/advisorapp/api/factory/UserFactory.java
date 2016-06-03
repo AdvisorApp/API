@@ -51,12 +51,9 @@ public class UserFactory {
         user = this.userService.signUp(user);
 
         // Create All UvUser for each UVs existing on database.
-        Iterator<Uv> uvs = this.uvRepository.findAll().iterator();
-        while (uvs.hasNext()) {
+        for (Uv uv : this.uvRepository.findAll()) {
             UvUser uvUser = new UvUser();
-            uvUser.setUser(user);
-            uvUser.setUv(uvs.next());
-            this.uvUserFactory.getUvUserService().createUvUser(uvUser);
+            this.uvUserFactory.getUvUserService().createUvUser(uvUser.setUser(user).setUv(uv));
         }
 
         return user;
