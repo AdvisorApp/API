@@ -60,8 +60,18 @@ public class SemesterService {
     }
 
     public Set<String> handleAddUv(Semester semester, Uv uv) {
+
         Set<String> errors = new HashSet<>();
         StudyPlan studyPlan = semester.getStudyPlan();
+
+        // Handle co-requisites UVs parallel addition.
+        Set<Uv> corequisitesUVs = uv.getRealCorequisites();
+        for (Uv corequisitesUV : corequisitesUVs) {
+            errors.addAll(this.handleAddCorequisiteUv(semester, corequisitesUV));
+            if (errors.size() > 0) {
+                return errors;
+            }
+        }
 
         if (studyPlan.containUv(uv)) {
             errors.add("The current study plan already contains the UV");
@@ -85,5 +95,43 @@ public class SemesterService {
         }
 
         return errors;
+    }
+
+    private Set<String> handleAddCorequisiteUv(Semester semester, Uv uv) {
+
+        Set<String> errors = new HashSet<>();
+        StudyPlan studyPlan = semester.getStudyPlan();
+
+        if (studyPlan.containUv(uv)) {
+            errors.add("The current study plan already contains the UV");
+        }
+
+        if (!studyPlan.containPrerequisite(uv))
+        {
+            errors.add("The current study plan does not contains its prerequisites");
+        }
+
+        if (errors.size() > 0)
+        {
+            return errors;
+        }
+
+        this.updateSemester(semester.addUv(uv));
+        return errors;
+    }
+
+    public Semester removeUvFromSemester(Semester semester, Uv uv) {
+        return removeUvFromSemester(semester, uv, true);
+    }
+
+    public Semester removeUvFromSemester(Semester semester, Uv uv, boolean root) {
+        if(root){
+            Set<Uv> corequisitesUVs = uv.getRealCorequisites();
+            for (Uv corequisitesUV : corequisitesUVs) {
+                this.removeUvFromSemester(semester, corequisitesUV, false);
+            }
+        }
+        semester.getUvs().remove(uv);
+        return semesterRepository.save(semester);
     }
 }
