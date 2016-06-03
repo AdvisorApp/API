@@ -10,6 +10,7 @@ import java.util.Set;
 
 
 public interface UvRepository extends PagingAndSortingRepository<Uv,Long> {
+
     @Query("SELECT u FROM Uv u WHERE u.isAvailableForCart = true ORDER BY u.name")
     Set<Uv> findByAvailableForCart();
 

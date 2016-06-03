@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashSet;
+import java.util.Set;
 
 @RestController
 @RequestMapping(value = "/api/uvs")
@@ -91,5 +93,22 @@ public class UvController extends AbstractRestHandler {
         this.uvFactory.getUvService().deleteUv(id);
     }
 
+    // ----- UV's co-requisites requests handler
+
+    @RequestMapping(value = "/{id}/corequisites",
+            method = RequestMethod.GET,
+            produces = "application/json")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get UV's corequisites")
+    public
+    @ResponseBody
+    Set<Uv> getUVCorequisites(@ApiParam(value = "The ID of the existing uv resource.", required = true)
+                               @PathVariable("id") Long id,
+                              HttpServletRequest request,
+                              HttpServletResponse response) {
+        Uv concernedUV = this.uvFactory.getUvService().getUv(id);
+        checkResourceFound(concernedUV);
+        return concernedUV.getRealCorequisites();
+    }
 
 }
