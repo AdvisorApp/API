@@ -180,7 +180,7 @@ public class Uv {
 
         return this;
     }
-
+    
     @JsonIgnore
     public Set<Uv> getRealCorequisites()
     {
@@ -189,7 +189,6 @@ public class Uv {
         corequisitesUVs.addAll(this.getCorequisitesUvOf());
         return corequisitesUVs;
     }
-    
 
     public Set<Uv> getCorequisitesUvOf() {
         return corequisitesUvOf;
