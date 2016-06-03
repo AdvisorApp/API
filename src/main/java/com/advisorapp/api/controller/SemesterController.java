@@ -140,5 +140,25 @@ public class SemesterController extends AbstractRestHandler {
         throw new IllegalArgumentException(errors.stream().reduce("", (acc, el) -> acc + el.toString() + "//"));
     }
 
+    @RequestMapping(value = "/{semester_id}/uv/{uv_id}",
+            method = RequestMethod.DELETE,
+            produces = "application/json")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiOperation(value = "Remove an UV from a semester resource.", notes = "You have to provide a valid semester ID in the URL. Once deleted the resource can not be recovered.")
+    public void deleteSemester(     @ApiParam(value = "The ID of the Semester.", required = true)
+                                    @PathVariable("semester_id") Long semesterId,
+                                    @ApiParam(value = "The Id of the uv.", required = true)
+                                    @PathVariable("uv_id") Long uvId,
+                                    HttpServletRequest request,
+                                    HttpServletResponse response) {
+        Semester semester = this.semesterFactory.getSemesterService().getSemester(semesterId);
+        checkResourceFound(semester);
+
+        Uv uv = this.uvFactory.getUvService().getUv(uvId);
+        checkResourceFound(uv);
+
+        this.semesterFactory.getSemesterService().removeUvFromSemester(semester, uv);
+    }
+
 
 }
