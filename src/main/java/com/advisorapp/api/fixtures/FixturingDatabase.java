@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class FixturingDatabase {
@@ -24,9 +25,11 @@ public class FixturingDatabase {
     }
 
     public void run() {
-        this.destroyDatabase();
+        if (this.tankFactory.getUserFactory().getUserService().getUserRepository().findAll().size() > 0) {
+            this.destroyDatabase();
+        }
 
-        ///INIT UVS
+        //INIT UVS
         this.initUvType();
         this.initUV();
 
@@ -38,7 +41,7 @@ public class FixturingDatabase {
         this.tankFactory.getStudyPlanFactory().createDefaultStudyPlanForUser(this.tankFactory.getUserFactory().createUser(
                 "Safou",
                 "Foufou",
-                "safou@mail.com",
+                "sa@fou.com",
                 new Date(),
                 "Bgette44",
                 "Bgette44"
@@ -46,6 +49,13 @@ public class FixturingDatabase {
     }
 
     protected void destroyDatabase() {
+        this.tankFactory
+                .getUserFactory()
+                .getUserService()
+                .getUserRepository()
+                .findAll()
+                .stream()
+                .forEach(e -> this.tankFactory.getUserFactory().getUserService().deleteUser(e.getId()));
 
     }
 
@@ -60,9 +70,9 @@ public class FixturingDatabase {
 
     protected Set<Uv> getUvs(String... uvs) {
         Set<Uv> uvSet = new HashSet<>();
-        for (String uv : uvs) {
-            uvSet.add((Uv) this.getEntry("UV", uv));
-        }
+
+        Arrays.asList(uvs).stream().forEach(e -> uvSet.add((Uv) this.getEntry("UV", e)));
+
         return uvSet;
     }
 

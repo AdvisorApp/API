@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.Semaphore;
 
 @Entity
 @Table(name = "uvs")
@@ -27,7 +27,7 @@ public class Uv {
     @Column()
     private String description;
 
-    @Column(name = "is_available_for_cart",nullable = false)
+    @Column(name = "is_available_for_cart", nullable = false)
     private boolean isAvailableForCart;
 
     @Column(nullable = false)
@@ -38,11 +38,12 @@ public class Uv {
     private Location location;
 
     @ManyToOne
-    @JoinColumn(name = "uv_type_id",nullable = false)
+    @JoinColumn(name = "uv_type_id", nullable = false)
     private UvType uvType;
 
-    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "uvs")
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "uvs", cascade = CascadeType.ALL)
     @JsonIgnore
+    @OrderBy(" number ASC ")
     private Set<Semester> semesters;
 
     @ManyToMany
@@ -50,15 +51,18 @@ public class Uv {
             joinColumns = @JoinColumn(name = "corequisite2"),
             inverseJoinColumns = @JoinColumn(name = "corequisite1"))
     @JsonIgnore
+    @OrderBy("name ASC")
     private Set<Uv> corequisitesUv;
 
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "corequisitesUv")
     @JsonIgnore
+    @OrderBy("name ASC")
     private Set<Uv> corequisitesUvOf;
 
     @ManyToMany
     @JoinTable(name = "prerequisite_uv",
             joinColumns = @JoinColumn(name = "prerequisite"))
+    @OrderBy("name ASC ")
     private Set<Uv> prerequisitesUv;
 
     @Enumerated(EnumType.STRING)
@@ -66,8 +70,7 @@ public class Uv {
         return location;
     }
 
-    public Uv()
-    {
+    public Uv() {
         this.semesters = new HashSet<>();
         this.corequisitesUv = new HashSet<>();
         this.corequisitesUvOf = new HashSet<>();
@@ -159,8 +162,7 @@ public class Uv {
         return corequisitesUv;
     }
 
-    public Uv addCorequisiteUv(Uv corequisite)
-    {
+    public Uv addCorequisiteUv(Uv corequisite) {
         this.corequisitesUv.add(corequisite);
         corequisite.addCorequisiteOf(this);
 
@@ -169,28 +171,21 @@ public class Uv {
 
     public Uv setCorequisitesUv(Set<Uv> corequisitesUv) {
         this.corequisitesUv = corequisitesUv;
-        for (Uv coUv : corequisitesUv)
-        {
-            coUv.addCorequisiteOf(this);
-        }
-
+        this.corequisitesUv.forEach(e -> e.addCorequisiteOf(this));
         return this;
     }
 
-    public Uv addCorequisiteOf(Uv uv)
-    {
+    public Uv addCorequisiteOf(Uv uv) {
         this.corequisitesUvOf.add(uv);
 
         return this;
     }
 
-    public Set<Uv> getRealCorequisites(Set<Uv> managedCorequisites, Set<Uv> realCorequisites)
-    {
+    public Set<Uv> getRealCorequisites(Set<Uv> managedCorequisites, Set<Uv> realCorequisites) {
         return this.getRealCorequisites(this, managedCorequisites, realCorequisites);
     }
 
-    protected Set<Uv> getRealCorequisites(Uv concernedUv, Set<Uv> managedCorequisites, Set<Uv> realCorequisites)
-    {
+    protected Set<Uv> getRealCorequisites(Uv concernedUv, Set<Uv> managedCorequisites, Set<Uv> realCorequisites) {
         concernedUv.corequisitesUv.stream().filter(uv -> !managedCorequisites.contains(uv)).forEach(uv -> {
             realCorequisites.add(uv);
             managedCorequisites.add(uv);
@@ -220,8 +215,7 @@ public class Uv {
         return this;
     }
 
-    public Uv addPrerequisite(Uv prerequisite)
-    {
+    public Uv addPrerequisite(Uv prerequisite) {
         this.prerequisitesUv.add(prerequisite);
 
         return this;

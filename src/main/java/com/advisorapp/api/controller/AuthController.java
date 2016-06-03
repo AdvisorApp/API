@@ -68,6 +68,9 @@ public class AuthController extends AbstractRestHandler {
     @ApiOperation(value = "SignUp", notes = "Sign Up a user")
     public void signUp(@RequestBody User user,
                 HttpServletRequest request, HttpServletResponse response) {
+//        if (this.userService.getUserRepository().findByEmail(user.getEmail())) {
+//
+//        }
         userService.signUp(user);
     }
 

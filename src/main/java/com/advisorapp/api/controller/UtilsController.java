@@ -22,7 +22,7 @@ public class UtilsController  extends AbstractRestHandler {
             method = RequestMethod.POST,
             consumes = "application/json",
             produces = "application/json")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.ACCEPTED)
     @ApiOperation(value = "Create an option resource.", notes = "Returns the URL of the new resource in the Location header.")
     public void initDatabase(HttpServletRequest request, HttpServletResponse response) {
         this.fixturingDatabase.run();

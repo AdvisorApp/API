@@ -71,7 +71,7 @@ public class UserService {
         return pageOfUsers;
     }
 
-    public UserRepository userRepository() {
+    public UserRepository getUserRepository() {
         return this.userRepository;
     }
 

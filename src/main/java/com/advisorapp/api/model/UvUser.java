@@ -7,12 +7,11 @@ import javax.persistence.*;
 @Entity
 @Table(name = "uv_user")
 public class UvUser {
-
     @Id
     @GeneratedValue
     private long id;
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "user_id", nullable = false)
     @JsonIgnore
     private User user;
