@@ -180,7 +180,7 @@ public class Uv {
 
         return this;
     }
-    
+
     @JsonIgnore
     public Set<Uv> getRealCorequisites()
     {
