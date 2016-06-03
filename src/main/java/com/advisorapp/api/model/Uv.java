@@ -181,25 +181,15 @@ public class Uv {
         return this;
     }
 
-    public Set<Uv> getRealCorequisites(Set<Uv> managedCorequisites, Set<Uv> realCorequisites) {
-        return this.getRealCorequisites(this, managedCorequisites, realCorequisites);
+    @JsonIgnore
+    public Set<Uv> getRealCorequisites()
+    {
+        Set<Uv> corequisitesUVs = new HashSet<>();
+        corequisitesUVs.addAll(this.getCorequisitesUv());
+        corequisitesUVs.addAll(this.getCorequisitesUvOf());
+        return corequisitesUVs;
     }
-
-    protected Set<Uv> getRealCorequisites(Uv concernedUv, Set<Uv> managedCorequisites, Set<Uv> realCorequisites) {
-        concernedUv.corequisitesUv.stream().filter(uv -> !managedCorequisites.contains(uv)).forEach(uv -> {
-            realCorequisites.add(uv);
-            managedCorequisites.add(uv);
-            this.getRealCorequisites(uv, managedCorequisites, realCorequisites);
-        });
-
-        concernedUv.getCorequisitesUvOf().stream().filter(uv -> !managedCorequisites.contains(uv)).forEach(uv -> {
-            realCorequisites.add(uv);
-            managedCorequisites.add(uv);
-            this.getRealCorequisites(uv, managedCorequisites, realCorequisites);
-        });
-
-        return realCorequisites;
-    }
+    
 
     public Set<Uv> getCorequisitesUvOf() {
         return corequisitesUvOf;
