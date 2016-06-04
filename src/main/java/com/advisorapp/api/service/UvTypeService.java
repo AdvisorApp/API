@@ -25,4 +25,8 @@ public class UvTypeService {
     {
         return this.uvTypeRepository.findAll();
     }
+
+    public void delete(Long id) {
+        uvTypeRepository.delete(id);
+    }
 }

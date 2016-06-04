@@ -34,12 +34,12 @@ public class User {
     @Column(name = "password", nullable = false, length = 60)
     private String password;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnore
     @OrderBy("name ASC")
     private Set<StudyPlan> studyPlans;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @OrderBy("uv ASC")
     private Set<UvUser> uvUsers;
 

@@ -26,15 +26,16 @@ public class FixturingDatabase {
 
     public void run() {
         if (this.tankFactory.getUserFactory().getUserService().getUserRepository().findAll().size() > 0) {
+            System.out.println("TRYING TO DO A REMOVE ");
             this.destroyDatabase();
         }
 
         //INIT UVS
-        this.initUvType();
-        this.initUV();
-
-        this.tankFactory.getStudyPlanFactory().createDefaultStudyPlanForUser(null);
-        this.initUser();
+        //this.initUvType();
+        //this.initUV();
+//
+        //this.tankFactory.getStudyPlanFactory().createDefaultStudyPlanForUser(null);
+        //this.initUser();
     }
 
     private void initUser() {
@@ -50,12 +51,39 @@ public class FixturingDatabase {
 
     protected void destroyDatabase() {
         this.tankFactory
+                .getUvUserFactory()
+                .getUvUserService()
+                .getUvUserRepository()
+                .findAll()
+                .forEach(e -> this.tankFactory.getUvUserFactory().getUvUserService().deleteUvUser(e.getId()));
+
+        this.tankFactory
+                .getSemesterFactory()
+                .getSemesterService()
+                .getSemesterRepository()
+                .findAll()
+                .forEach(e -> this.tankFactory.getSemesterFactory().getSemesterService().deleteSemester(e.getId()));
+
+        this.tankFactory
+                .getStudyPlanFactory()
+                .getStudyPlanService()
+                .getStudyPlanRepository()
+                .findAll()
+                .forEach(e -> this.tankFactory.getStudyPlanFactory().getStudyPlanService().deleteStudyPlan(e.getId()));
+
+        this.tankFactory
                 .getUserFactory()
                 .getUserService()
                 .getUserRepository()
                 .findAll()
                 .stream()
                 .forEach(e -> this.tankFactory.getUserFactory().getUserService().deleteUser(e.getId()));
+
+        this.tankFactory
+                .getUvTypeFactory()
+                .getUvTypeService()
+                .getAllUvTypes()
+                .forEach(e -> this.tankFactory.getUvTypeFactory().getUvTypeService().delete(e.getId()));
 
     }
 
@@ -105,47 +133,47 @@ public class FixturingDatabase {
 
         ///SEMESTRE 4
         this.createUV("technical-writing", "Technical Writing", "0202207", false, 3, Location.FACULTY, false, null, this.getUvs(unknown(0202104)));
-        this.createUV(unknown(1440261), "Unknown 10",           "1440261", false, 3, Location.FACULTY, false, null, this.getUvs(unknown(1440161)));
-        this.createUV("or-1", "OR 1",                           "0405311", false, 4, Location.DEPARTMENT, true, null, this.getUvs(unknown(1440211)));
-        this.createUV("app-elec-circ", "App. Elec. Circuit",    "0402207", false, 3, Location.DEPARTMENT, true, null, this.getUvs("physics-2"));
-        this.createUV("princ-of-mgt", "Principales of MGT",     "0302160", false, 3, Location.DEPARTMENT, false, null, null);
-        this.createUV("univ-elec-1", "University Elec. 1",      "CARTUV1", true, 3, Location.UNIVERSITY, false, null, null);
+        this.createUV(unknown(1440261), "Unknown 10", "1440261", false, 3, Location.FACULTY, false, null, this.getUvs(unknown(1440161)));
+        this.createUV("or-1", "OR 1", "0405311", false, 4, Location.DEPARTMENT, true, null, this.getUvs(unknown(1440211)));
+        this.createUV("app-elec-circ", "App. Elec. Circuit", "0402207", false, 3, Location.DEPARTMENT, true, null, this.getUvs("physics-2"));
+        this.createUV("princ-of-mgt", "Principales of MGT", "0302160", false, 3, Location.DEPARTMENT, false, null, null);
+        this.createUV("univ-elec-1", "University Elec. 1", "CARTUV1", true, 3, Location.UNIVERSITY, false, null, null);
 
         ///SEMESTRE 5
-        this.createUV("db-mgt-iis", "DB MGT & IIS",             "0405260", false, 4, Location.DEPARTMENT, true, null, this.getUvs("prog-for-engineers"));
-        this.createUV("ergonomics", "Ergonomics",               "0405341", false, 4, Location.DEPARTMENT, true, null, this.getUvs("eng-prob-stat", "manufacturing-tech"));
-        this.createUV(unknown(0405322), "Unknown 11",           "0405322", false, 3, Location.DEPARTMENT, false, null, this.getUvs("eng-prob-stat"));
-        this.createUV("or-2", "OR 2",                           "0405414", false, 3, Location.DEPARTMENT, false, null, this.getUvs("eng-prob-stat", "or-1"));
-        this.createUV("ind-autom", "Industrial Automation",     "0405331", false, 4, Location.DEPARTMENT, true, null, this.getUvs("app-elec-circ"));
+        this.createUV("db-mgt-iis", "DB MGT & IIS", "0405260", false, 4, Location.DEPARTMENT, true, null, this.getUvs("prog-for-engineers"));
+        this.createUV("ergonomics", "Ergonomics", "0405341", false, 4, Location.DEPARTMENT, true, null, this.getUvs("eng-prob-stat", "manufacturing-tech"));
+        this.createUV(unknown(0405322), "Unknown 11", "0405322", false, 3, Location.DEPARTMENT, false, null, this.getUvs("eng-prob-stat"));
+        this.createUV("or-2", "OR 2", "0405414", false, 3, Location.DEPARTMENT, false, null, this.getUvs("eng-prob-stat", "or-1"));
+        this.createUV("ind-autom", "Industrial Automation", "0405331", false, 4, Location.DEPARTMENT, true, null, this.getUvs("app-elec-circ"));
 
         ///SEMESTRE 6
         this.createUV("des-env-saf", "Design for the Environment & safety", "0405301", false, 3, Location.DEPARTMENT, false, null, this.getUvs("ergonomics"));
-        this.createUV(unknown(0405323), "Unknown 12",                       "0405323", false, 3, Location.DEPARTMENT, false, null, this.getUvs("eng-prob-stat"));
-        this.createUV("simulation", "Simulation",                           "0405324", false, 3, Location.DEPARTMENT, true, null, this.getUvs("eng-prob-stat"));
-        this.createUV(unknown(0405431), "Unknown 13",                       "0405431", false, 3, Location.DEPARTMENT, false, null, this.getUvs("eng-prob-stat"));
-        this.createUV(unknown(0405464), "Unknown 14",                       "0405464", false, 3, Location.DEPARTMENT, false, null, null);
+        this.createUV(unknown(0405323), "Unknown 12", "0405323", false, 3, Location.DEPARTMENT, false, null, this.getUvs("eng-prob-stat"));
+        this.createUV("simulation", "Simulation", "0405324", false, 3, Location.DEPARTMENT, true, null, this.getUvs("eng-prob-stat"));
+        this.createUV(unknown(0405431), "Unknown 13", "0405431", false, 3, Location.DEPARTMENT, false, null, this.getUvs("eng-prob-stat"));
+        this.createUV(unknown(0405464), "Unknown 14", "0405464", false, 3, Location.DEPARTMENT, false, null, null);
         this.createUV("univ-elec-2", "University Elec. 2", "CARTUV2", true, 3, Location.UNIVERSITY, false, null, null);
 
         ///SEMESTRE 7
         this.createUV("pratical-training", "Pratical Training", "0400490", false, 0, Location.FACULTY, false, null, null);
 
         ///COMMON SEMESTRE 8
-        this.createUV("arabic-1", "Arabic 1",                              "0201100", false, 3, Location.UNIVERSITY, false, null, null);
+        this.createUV("arabic-1", "Arabic 1", "0201100", false, 3, Location.UNIVERSITY, false, null, null);
         this.createUV("prod-des-innov-mgt", "Product Design & Innov. MGT", "0405461", false, 3, Location.DEPARTMENT, false, null, null);
-        this.createUV("supply-chain-mgt", "Supply Chain MGT",              "0405433", false, 3, Location.DEPARTMENT, false, null, this.getUvs(unknown(0405431)));
-        this.createUV(unknown(0301215), "Unknown 15",                      "0301215", false, 3, Location.DEPARTMENT, false, null, null);
-        this.createUV("univ-elec-3", "University Elec. 3",                 "CARTUV3", true,  3, Location.UNIVERSITY, false, null, null);
-        this.createUV("senior-project-1", "Senior Project I",              "0405491", false, 1, Location.DEPARTMENT, false, null, this.getUvs("technical-writing"));
-        this.createUV("depa-elec-1", "Department Elec. 1",                 "CARTUV4", true,  3, Location.DEPARTMENT, false, null, null);
+        this.createUV("supply-chain-mgt", "Supply Chain MGT", "0405433", false, 3, Location.DEPARTMENT, false, null, this.getUvs(unknown(0405431)));
+        this.createUV(unknown(0301215), "Unknown 15", "0301215", false, 3, Location.DEPARTMENT, false, null, null);
+        this.createUV("univ-elec-3", "University Elec. 3", "CARTUV3", true, 3, Location.UNIVERSITY, false, null, null);
+        this.createUV("senior-project-1", "Senior Project I", "0405491", false, 1, Location.DEPARTMENT, false, null, this.getUvs("technical-writing"));
+        this.createUV("depa-elec-1", "Department Elec. 1", "CARTUV4", true, 3, Location.DEPARTMENT, false, null, null);
 
         ///COMMON SEMESTRE 9
-        this.createUV("arabic-2", "Arabic 2",                              "0201101", false, 3, Location.UNIVERSITY, false, null, this.getUvs("arabic-1"));
-        this.createUV("facilities-planning", "Facilities Planning",        "0405432", false, 3, Location.UNIVERSITY, false, null, this.getUvs("ergonomics"));
-        this.createUV("eng-ethics-lead", "Eng. Ethics & Leadership",       "0405401", false, 1, Location.FACULTY, false, null, null);
-        this.createUV("eng-economics", "Eng. Economics",                   "0401301", false, 3, Location.FACULTY, false, null, null);
-        this.createUV("univ-elec-4", "University Elec. 4",                 "CARTUV5", true, 3, Location.UNIVERSITY, false, null, null);
-        this.createUV("senior-project-2", "Senior Project II",             "0405492", false, 1, Location.DEPARTMENT, false, null, this.getUvs("senior-project-1"));
-        this.createUV("depa-elec-2", "Department Elec. 2",                 "CARTUV6", true, 3, Location.DEPARTMENT, false, null, null);
+        this.createUV("arabic-2", "Arabic 2", "0201101", false, 3, Location.UNIVERSITY, false, null, this.getUvs("arabic-1"));
+        this.createUV("facilities-planning", "Facilities Planning", "0405432", false, 3, Location.UNIVERSITY, false, null, this.getUvs("ergonomics"));
+        this.createUV("eng-ethics-lead", "Eng. Ethics & Leadership", "0405401", false, 1, Location.FACULTY, false, null, null);
+        this.createUV("eng-economics", "Eng. Economics", "0401301", false, 3, Location.FACULTY, false, null, null);
+        this.createUV("univ-elec-4", "University Elec. 4", "CARTUV5", true, 3, Location.UNIVERSITY, false, null, null);
+        this.createUV("senior-project-2", "Senior Project II", "0405492", false, 1, Location.DEPARTMENT, false, null, this.getUvs("senior-project-1"));
+        this.createUV("depa-elec-2", "Department Elec. 2", "CARTUV6", true, 3, Location.DEPARTMENT, false, null, null);
     }
 
     protected Uv createUV(
@@ -158,7 +186,7 @@ public class FixturingDatabase {
             Boolean isTp,
             Set<Uv> corequisites,
             Set<Uv> prerequisites
-            ) {
+    ) {
         Uv uv = this.tankFactory.getUvFactory().createUV(
                 name,
                 "SOME DESCRIPTION",
