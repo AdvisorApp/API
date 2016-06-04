@@ -3,7 +3,7 @@ package com.advisorapp.api.model;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -23,13 +23,19 @@ public class Semester {
     @JoinColumn(name = "study_plan_id", nullable = false)
     private StudyPlan studyPlan;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST})
     @JoinTable(
         name = "uv_semester",
         joinColumns = {@JoinColumn(name = "semester_id",nullable = false) },
         inverseJoinColumns = { @JoinColumn(name = "uv_id", nullable = false)}
     )
+    @OrderBy("name ASC")
     private Set<Uv> uvs;
+
+    public Semester()
+    {
+        this.uvs = new HashSet<>();
+    }
 
     public Set<Uv> getUvs() {
         return this.uvs;
@@ -75,20 +81,12 @@ public class Semester {
 
         //TODO add its corequisites and prerequisites
 
-        if (uv.getOption() != null) {
-            this.getStudyPlan().setOption(uv.getOption());
-        }
-
         return this;
     }
 
     public Semester setUvs(Set<Uv> uvs) {
         this.uvs = uvs;
-
-        for (Uv uv : uvs)
-        {
-            uv.addSemester(this);
-        }
+        this.uvs.stream().forEach(e -> e.addSemester(this));
 
         return this;
     }

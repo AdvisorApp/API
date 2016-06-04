@@ -38,17 +38,6 @@ public class UserController extends AbstractRestHandler {
     @Autowired
     private StudyPlanFactory studyPlanFactory;
 
-    @RequestMapping(value = "",
-            method = RequestMethod.POST,
-            consumes = "application/json",
-            produces = "application/json")
-    @ResponseStatus(HttpStatus.CREATED)
-    @ApiOperation(value = "Create an user resource.", notes = "Returns the URL of the new resource in the Location header.")
-    public void createUser(@RequestBody User user,
-                           HttpServletRequest request, HttpServletResponse response) {
-        response.setHeader("Location", request.getRequestURL().append("/").append(this.userFactory.createUser(user).getId()).toString());
-    }
-
     @RequestMapping(value = "/me",
             method = RequestMethod.GET,
             produces = "application/json")
@@ -56,30 +45,10 @@ public class UserController extends AbstractRestHandler {
     @ApiOperation(value = "Get connected user information", notes = "Returns the information of user that corresponds to the JWT")
     public
     @ResponseBody
-    User getMe(@ApiParam(value = "The page number (zero-based)", required = true)
-                     @RequestParam(value = "page", required = true, defaultValue = DEFAULT_PAGE_NUM) Integer page,
-                     @ApiParam(value = "Tha page size", required = true)
-                     @RequestParam(value = "size", required = true, defaultValue = DEFAULT_PAGE_SIZE) Integer size,
-                     SecuredRequest request, HttpServletResponse response) {
+    User getMe(SecuredRequest request, HttpServletResponse response) {
         return request.getUser();
     }
 
-
-    @RequestMapping(value = "/{id}",
-            method = RequestMethod.GET,
-            produces = {"application/json", "application/xml"})
-    @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Get a single user.", notes = "You have to provide a valid user ID.")
-    public
-    @ResponseBody
-    User getUser(@ApiParam(value = "The ID of the user.", required = true)
-                 @PathVariable("id") Long id,
-                 HttpServletRequest request, HttpServletResponse response) throws Exception {
-        User user = this.userFactory.getUserService().getUser(id);
-        checkResourceFound(user);
-        //todo: http://goo.gl/6iNAkz
-        return user;
-    }
 
     @RequestMapping(value = "/{id}",
             method = RequestMethod.PUT,
@@ -91,28 +60,9 @@ public class UserController extends AbstractRestHandler {
                            @PathVariable("id") Long id, @RequestBody User user,
                            HttpServletRequest request, HttpServletResponse response) {
         checkResourceFound(this.userFactory.getUserService().getUser(id));
-        if (id != user.getId()) throw new DataFormatException("ID doesn't match!");
+        if (!id.equals(user.getId())) throw new DataFormatException("ID doesn't match!");
 
         this.userFactory.getUserService().updateUser(user);
-    }
-
-    //todo: @ApiImplicitParams, @ApiResponses
-    @RequestMapping(value = "/{id}",
-            method = RequestMethod.DELETE,
-            produces = "application/json")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @ApiOperation(value = "Delete a user resource.", notes = "You have to provide a valid user ID in the URL. Once deleted the resource can not be recovered.")
-    public void deleteUser(@ApiParam(value = "The ID of the existing user resource.", required = true)
-                           @PathVariable("id") Long id, HttpServletRequest request,
-                           HttpServletResponse response) {
-        checkResourceFound(this.userFactory.getUserService().getUser(id));
-
-        this.userFactory.getUserService().deleteUser(id);
-    }
-
-
-    User me(SecuredRequest request, HttpServletResponse response) {
-        return this.userFactory.getUserService().findById(request.getUser().getId());
     }
 
     // ----- User's study plan requests handler

@@ -22,9 +22,7 @@ public class UvFactory {
         String description,
         String remoteId,
         Boolean isAvailableForCart,
-        Integer minSemester,
         Integer chs,
-        Option option,
         Location location,
         UvType uvType,
         Set<Uv> corequisites,
@@ -38,9 +36,7 @@ public class UvFactory {
                 .setDescription(description)
                 .setRemoteId(remoteId)
                 .setIsAvailableForCard(isAvailableForCart)
-                .setMinSemester(minSemester)
                 .setChs(chs)
-                .setOption(option)
                 .setLocation(location)
                 .setUvType(uvType)
                 .setCorequisitesUv(corequisites == null ? new HashSet<Uv>() : corequisites)

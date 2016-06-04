@@ -10,18 +10,10 @@ public class UvTypeFactory {
     @Autowired
     private UvTypeService uvTypeService;
 
-    public UvType create(
-            String type,
-            Double hoursByCredit
-    )
+    public UvType create(String type, Double hoursByCredit)
     {
         UvType uvType = new UvType();
-
-        return this.uvTypeService.createUvType(
-            uvType
-                .setType(type)
-                .setHoursByCredit(hoursByCredit)
-        );
+        return this.uvTypeService.createUvType(uvType.setType(type).setHoursByCredit(hoursByCredit));
     }
 
     public UvTypeService getUvTypeService()
