@@ -25,12 +25,6 @@ public class StudyPlanService {
     @Autowired
     private UvRepository uvRepository;
 
-    @Autowired
-    CounterService counterService;
-
-    @Autowired
-    GaugeService gaugeService;
-
     public StudyPlanService() {
     }
 
@@ -48,6 +42,11 @@ public class StudyPlanService {
 
     public void deleteStudyPlan(Long id) {
         studyPlanRepository.delete(id);
+    }
+
+    public StudyPlanRepository getStudyPlanRepository()
+    {
+        return this.studyPlanRepository;
     }
 
     public Set<Uv> getSPNotChosenUVs(long id) {

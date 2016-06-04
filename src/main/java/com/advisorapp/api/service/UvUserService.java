@@ -47,4 +47,9 @@ public class UvUserService {
     public Set<UvUser> getAllUvUsers() {
         return this.uvUserRepository.findAll();
     }
+
+    public UvUserRepository getUvUserRepository()
+    {
+        return this.uvUserRepository;
+    }
 }

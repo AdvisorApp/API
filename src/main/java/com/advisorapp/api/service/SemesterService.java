@@ -7,10 +7,6 @@ import com.advisorapp.api.model.Uv;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.metrics.CounterService;
-import org.springframework.boot.actuate.metrics.GaugeService;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -23,12 +19,6 @@ public class SemesterService {
 
     @Autowired
     private SemesterRepository semesterRepository;
-
-    @Autowired
-    CounterService counterService;
-
-    @Autowired
-    GaugeService gaugeService;
 
     public SemesterService() {
     }
@@ -49,14 +39,9 @@ public class SemesterService {
         semesterRepository.delete(id);
     }
 
-    //http://goo.gl/7fxvVf
-    public Page<Semester> getAllSemesters(Integer page, Integer size) {
-        Page pageOfSemesters = semesterRepository.findAll(new PageRequest(page, size));
-        // example of adding to the /metrics
-        if (size > 50) {
-            counterService.increment("advisorapp.SemesterService.getAll.largePayload");
-        }
-        return pageOfSemesters;
+    public SemesterRepository getSemesterRepository()
+    {
+        return this.semesterRepository;
     }
 
     public Set<String> handleAddUv(Semester semester, Uv uv) {
