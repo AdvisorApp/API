@@ -128,6 +128,19 @@ public class StudyPlan implements Serializable {
         return uvs;
     }
 
+    @JsonIgnore
+    public Set<Uv> getCartUvs() {
+        Set<Uv> cartUvs = new HashSet<>();
+        for(Semester semester : this.getSemesters()){
+            for(Uv uv : semester.getUvs()){
+                if(uv.isAvailableForCart()){
+                    cartUvs.add(uv);
+                }
+            }
+        }
+        return cartUvs;
+    }
+
     @Override
     public String toString() {
         return "StudyPlan{" +

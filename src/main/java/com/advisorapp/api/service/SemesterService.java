@@ -60,27 +60,7 @@ public class SemesterService {
     }
 
     public Set<String> handleAddUv(Semester semester, Uv uv) {
-
-        Set<String> errors = new HashSet<>();
-        StudyPlan studyPlan = semester.getStudyPlan();
-
-        // Handle co-requisites UVs parallel addition.
-        Set<Uv> corequisitesUVs = uv.getRealCorequisites();
-        for (Uv corequisitesUV : corequisitesUVs) {
-            errors.addAll(this.handleAddCorequisiteUv(semester, corequisitesUV));
-            if (errors.size() > 0) {
-                return errors;
-            }
-        }
-
-        if (studyPlan.containUv(uv)) {
-            errors.add("The current study plan already contains the UV");
-        }
-
-        if (!studyPlan.containPrerequisite(uv))
-        {
-            errors.add("The current study plan does not contains its prerequisites");
-        }
+        Set<String> errors = this.handleAddUv(semester, uv, true);
 
         if (errors.size() > 0)
         {
@@ -97,26 +77,36 @@ public class SemesterService {
         return errors;
     }
 
-    private Set<String> handleAddCorequisiteUv(Semester semester, Uv uv) {
+    public Set<String> handleAddUv(Semester semester, Uv uv, boolean root) {
 
         Set<String> errors = new HashSet<>();
         StudyPlan studyPlan = semester.getStudyPlan();
+
+        if(root){
+            // Handle co-requisites UVs parallel addition.
+            Set<Uv> corequisitesUVs = uv.getRealCorequisites();
+            for (Uv corequisitesUV : corequisitesUVs) {
+                errors.addAll(this.handleAddUv(semester, corequisitesUV, false));
+                if (errors.size() > 0) {
+                    return errors;
+                }
+            }
+        }
+
 
         if (studyPlan.containUv(uv)) {
             errors.add("The current study plan already contains the UV");
         }
 
-        if (!studyPlan.containPrerequisite(uv))
-        {
+        if (!studyPlan.containPrerequisite(uv)) {
             errors.add("The current study plan does not contains its prerequisites");
         }
 
-        if (errors.size() > 0)
+        if (uv.isAvailableForCart() && studyPlan.getCartUvs().size() >= 4)
         {
-            return errors;
+            errors.add("The current study contains already the maximum number of chosen cart UVs");
         }
 
-        this.updateSemester(semester.addUv(uv));
         return errors;
     }
 
