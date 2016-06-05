@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Set;
+import java.util.SortedSet;
 
 @RestController
 @RequestMapping(value = "/api/studyPlans")
@@ -30,24 +31,9 @@ public class StudyPlanController extends AbstractRestHandler {
     @Autowired
     private SemesterFactory semesterFactory;
 
-    @RequestMapping(value = "",
-            method = RequestMethod.GET,
-            produces = "application/json")
-    @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Get a paginated list of all studyPlans.", notes = "The list is paginated. You can provide a page number (default 0) and a page size (default 100)")
-    public
-    @ResponseBody
-    Page<StudyPlan> getAllStudyPlans(@ApiParam(value = "The page number (zero-based)", required = true)
-                                     @RequestParam(value = "page", required = true, defaultValue = DEFAULT_PAGE_NUM) Integer page,
-                                     @ApiParam(value = "Tha page size", required = true)
-                                     @RequestParam(value = "size", required = true, defaultValue = DEFAULT_PAGE_SIZE) Integer size,
-                                     HttpServletRequest request, HttpServletResponse response) {
-        return this.studyPlanFactory.getStudyPlanService().getAllStudyPlans(page, size);
-    }
-
     @RequestMapping(value = "/{id}",
             method = RequestMethod.GET,
-            produces = {"application/json", "application/xml"})
+            produces = "application/json")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get a single studyPlan.", notes = "You have to provide a valid studyPlan ID.")
     public
@@ -57,6 +43,9 @@ public class StudyPlanController extends AbstractRestHandler {
                            HttpServletRequest request, HttpServletResponse response) throws Exception {
         StudyPlan studyPlan = this.studyPlanFactory.getStudyPlanService().getStudyPlan(id);
         checkResourceFound(studyPlan);
+
+        //studyPlan.getSemesters();
+        System.out.println(studyPlan.getSemesters().size());
         //todo: http://goo.gl/6iNAkz
         return studyPlan;
     }
@@ -71,7 +60,7 @@ public class StudyPlanController extends AbstractRestHandler {
                                 @PathVariable("id") Long id, @RequestBody StudyPlan studyPlan,
                                 HttpServletRequest request, HttpServletResponse response) {
         checkResourceFound(this.studyPlanFactory.getStudyPlanService().getStudyPlan(id));
-        if (id != studyPlan.getId()) throw new DataFormatException("ID doesn't match!");
+        if (!id.equals(studyPlan.getId())) throw new DataFormatException("ID doesn't match!");
         this.studyPlanFactory.getStudyPlanService().updateStudyPlan(studyPlan);
     }
 
@@ -99,7 +88,7 @@ public class StudyPlanController extends AbstractRestHandler {
     @ResponseBody
     Set<Semester> getSemesterBySP(@ApiParam(value = "The ID of the SP.", required = true)
                                   @PathVariable("id") Long id,
-                                  HttpServletRequest request, HttpServletResponse response) throws Exception {
+                                        HttpServletRequest request, HttpServletResponse response) throws Exception {
         StudyPlan studyPlan = this.studyPlanFactory.getStudyPlanService().getStudyPlan(id);
         checkResourceFound(studyPlan);
         return studyPlan.getSemesters();
@@ -152,6 +141,4 @@ public class StudyPlanController extends AbstractRestHandler {
         checkResourceFound(studyPlan);
         return studyPlanFactory.getStudyPlanService().getSPCartNotChosenUVs(id);
     }
-
-
 }

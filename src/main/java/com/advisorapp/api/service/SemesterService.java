@@ -7,10 +7,6 @@ import com.advisorapp.api.model.Uv;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.metrics.CounterService;
-import org.springframework.boot.actuate.metrics.GaugeService;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -23,12 +19,6 @@ public class SemesterService {
 
     @Autowired
     private SemesterRepository semesterRepository;
-
-    @Autowired
-    CounterService counterService;
-
-    @Autowired
-    GaugeService gaugeService;
 
     public SemesterService() {
     }
@@ -49,28 +39,13 @@ public class SemesterService {
         semesterRepository.delete(id);
     }
 
-    //http://goo.gl/7fxvVf
-    public Page<Semester> getAllSemesters(Integer page, Integer size) {
-        Page pageOfSemesters = semesterRepository.findAll(new PageRequest(page, size));
-        // example of adding to the /metrics
-        if (size > 50) {
-            counterService.increment("advisorapp.SemesterService.getAll.largePayload");
-        }
-        return pageOfSemesters;
+    public SemesterRepository getSemesterRepository()
+    {
+        return this.semesterRepository;
     }
 
     public Set<String> handleAddUv(Semester semester, Uv uv) {
-        Set<String> errors = new HashSet<>();
-        StudyPlan studyPlan = semester.getStudyPlan();
-
-        if (studyPlan.containUv(uv)) {
-            errors.add("The current study plan already contains the UV");
-        }
-
-        if (!studyPlan.containPrerequisite(uv))
-        {
-            errors.add("The current study plan does not contains its prerequisites");
-        }
+        Set<String> errors = this.handleAddUv(semester, uv, true);
 
         if (errors.size() > 0)
         {
@@ -85,5 +60,53 @@ public class SemesterService {
         }
 
         return errors;
+    }
+
+    public Set<String> handleAddUv(Semester semester, Uv uv, boolean root) {
+
+        Set<String> errors = new HashSet<>();
+        StudyPlan studyPlan = semester.getStudyPlan();
+
+        if(root){
+            // Handle co-requisites UVs parallel addition.
+            Set<Uv> corequisitesUVs = uv.getRealCorequisites();
+            for (Uv corequisitesUV : corequisitesUVs) {
+                errors.addAll(this.handleAddUv(semester, corequisitesUV, false));
+                if (errors.size() > 0) {
+                    return errors;
+                }
+            }
+        }
+
+
+        if (studyPlan.containUv(uv)) {
+            errors.add("The current study plan already contains the UV");
+        }
+
+        if (!studyPlan.containPrerequisite(uv)) {
+            errors.add("The current study plan does not contains its prerequisites");
+        }
+
+        if (uv.isAvailableForCart() && studyPlan.getCartUvs().size() >= 6)
+        {
+            errors.add("The current study contains already the maximum number of chosen cart UVs");
+        }
+
+        return errors;
+    }
+
+    public Semester removeUvFromSemester(Semester semester, Uv uv) {
+        return removeUvFromSemester(semester, uv, true);
+    }
+
+    public Semester removeUvFromSemester(Semester semester, Uv uv, boolean root) {
+        if(root){
+            Set<Uv> corequisitesUVs = uv.getRealCorequisites();
+            for (Uv corequisitesUV : corequisitesUVs) {
+                this.removeUvFromSemester(semester, corequisitesUV, false);
+            }
+        }
+        semester.getUvs().remove(uv);
+        return semesterRepository.save(semester);
     }
 }

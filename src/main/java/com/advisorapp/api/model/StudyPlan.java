@@ -4,8 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "study_plans")
@@ -14,20 +13,17 @@ public class StudyPlan implements Serializable {
     @GeneratedValue
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
 
     @Column
     private String name;
 
-    @OneToMany(mappedBy = "studyPlan", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "studyPlan", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
+    @OrderBy("number ASC ")
     private Set<Semester> semesters;
-
-    @ManyToOne
-    @JoinColumn(name = "option_id")
-    private Option option;
 
     public StudyPlan() {
         this.semesters = new HashSet<>();
@@ -73,6 +69,7 @@ public class StudyPlan implements Serializable {
     }
 
     public Set<Semester> getSemesters() {
+
         return semesters;
     }
 
@@ -83,16 +80,6 @@ public class StudyPlan implements Serializable {
         }
 
         this.semesters = semesters;
-
-        return this;
-    }
-
-    public Option getOption() {
-        return option;
-    }
-
-    public StudyPlan setOption(Option option) {
-        this.option = option;
 
         return this;
     }
@@ -135,13 +122,23 @@ public class StudyPlan implements Serializable {
         return true;
     }
 
-
-    protected Set<Uv> getUvs()
-    {
+    protected Set<Uv> getUvs() {
         Set<Uv> uvs = new HashSet<>();
         semesters.stream().forEach(e -> uvs.addAll(e.getUvs()));
-
         return uvs;
+    }
+
+    @JsonIgnore
+    public Set<Uv> getCartUvs() {
+        Set<Uv> cartUvs = new HashSet<>();
+        for(Semester semester : this.getSemesters()){
+            for(Uv uv : semester.getUvs()){
+                if(uv.isAvailableForCart()){
+                    cartUvs.add(uv);
+                }
+            }
+        }
+        return cartUvs;
     }
 
     @Override
@@ -151,7 +148,6 @@ public class StudyPlan implements Serializable {
                 ", user=" + user +
                 ", name='" + name + '\'' +
                 ", semesters=" + semesters +
-                ", option=" + option +
                 '}';
     }
 }

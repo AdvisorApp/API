@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Set;
+import java.util.SortedSet;
 
 
 @RestController
@@ -29,21 +30,6 @@ public class SemesterController extends AbstractRestHandler {
 
     @Autowired
     private UvFactory uvFactory;
-
-    @RequestMapping(value = "",
-            method = RequestMethod.GET,
-            produces = "application/json")
-    @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Get a paginated list of all semesters.", notes = "The list is paginated. You can provide a page number (default 0) and a page size (default 100)")
-    public
-    @ResponseBody
-    Page<Semester> getAllSemesters(@ApiParam(value = "The page number (zero-based)", required = true)
-                           @RequestParam(value = "page", required = true, defaultValue = DEFAULT_PAGE_NUM) Integer page,
-                           @ApiParam(value = "Tha page size", required = true)
-                           @RequestParam(value = "size", required = true, defaultValue = DEFAULT_PAGE_SIZE) Integer size,
-                           HttpServletRequest request, HttpServletResponse response) {
-        return this.semesterFactory.getSemesterService().getAllSemesters(page, size);
-    }
 
     @RequestMapping(value = "/{id}",
             method = RequestMethod.GET,
@@ -138,6 +124,26 @@ public class SemesterController extends AbstractRestHandler {
         }
 
         throw new IllegalArgumentException(errors.stream().reduce("", (acc, el) -> acc + el.toString() + "//"));
+    }
+
+    @RequestMapping(value = "/{semester_id}/uv/{uv_id}",
+            method = RequestMethod.DELETE,
+            produces = "application/json")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiOperation(value = "Remove an UV from a semester resource.", notes = "You have to provide a valid semester ID in the URL. Once deleted the resource can not be recovered.")
+    public void deleteSemester(     @ApiParam(value = "The ID of the Semester.", required = true)
+                                    @PathVariable("semester_id") Long semesterId,
+                                    @ApiParam(value = "The Id of the uv.", required = true)
+                                    @PathVariable("uv_id") Long uvId,
+                                    HttpServletRequest request,
+                                    HttpServletResponse response) {
+        Semester semester = this.semesterFactory.getSemesterService().getSemester(semesterId);
+        checkResourceFound(semester);
+
+        Uv uv = this.uvFactory.getUvService().getUv(uvId);
+        checkResourceFound(uv);
+
+        this.semesterFactory.getSemesterService().removeUvFromSemester(semester, uv);
     }
 
 

@@ -1,6 +1,7 @@
 package com.advisorapp.api.controller;
 
 import com.advisorapp.api.SecuredRequest;
+import com.advisorapp.api.exception.UnmakableRequestException;
 import com.advisorapp.api.model.RestErrorInfo;
 import com.advisorapp.api.exception.DataFormatException;
 import com.advisorapp.api.exception.ResourceNotFoundException;
@@ -51,6 +52,16 @@ public abstract class AbstractRestHandler implements ApplicationEventPublisherAw
         log.info("ResourceNotFoundException handler:" + ex.getMessage());
 
         return new RestErrorInfo(ex, "Sorry I couldn't find it.");
+    }
+
+    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
+    @ExceptionHandler(UnmakableRequestException.class)
+    public
+    @ResponseBody
+    RestErrorInfo cantMakeRequest(UnmakableRequestException ex, WebRequest request, HttpServletResponse response) {
+        log.info("UnmakableRequest handler:" + ex.getMessage());
+
+        return new RestErrorInfo(ex, "Unmakable Request");
     }
 
     @Override

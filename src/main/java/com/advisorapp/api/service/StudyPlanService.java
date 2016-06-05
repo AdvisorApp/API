@@ -5,20 +5,14 @@ import com.advisorapp.api.dao.UvRepository;
 import com.advisorapp.api.model.Semester;
 import com.advisorapp.api.model.StudyPlan;
 import com.advisorapp.api.model.Uv;
-import com.advisorapp.api.model.UvUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.metrics.CounterService;
 import org.springframework.boot.actuate.metrics.GaugeService;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class StudyPlanService {
@@ -30,12 +24,6 @@ public class StudyPlanService {
 
     @Autowired
     private UvRepository uvRepository;
-
-    @Autowired
-    CounterService counterService;
-
-    @Autowired
-    GaugeService gaugeService;
 
     public StudyPlanService() {
     }
@@ -56,6 +44,11 @@ public class StudyPlanService {
         studyPlanRepository.delete(id);
     }
 
+    public StudyPlanRepository getStudyPlanRepository()
+    {
+        return this.studyPlanRepository;
+    }
+
     public Set<Uv> getSPNotChosenUVs(long id) {
         StudyPlan sp = studyPlanRepository.findOne(id);
 
@@ -72,13 +65,6 @@ public class StudyPlanService {
         Set<Uv> uvsNotChosen = new HashSet<>();
 
         for (Uv uv : uvs) {
-            if (studyPlan.getOption() != null && uv.getOption() != null)
-            {
-                if (studyPlan.getOption().getId() != uv.getOption().getId())
-                {
-                    continue;
-                }
-            }
             boolean uvChosen = false;
             for (Semester semester : semesters) {
                 if (semester.getUvs().contains(uv)) {
@@ -90,15 +76,5 @@ public class StudyPlanService {
         }
 
         return uvsNotChosen;
-    }
-
-    //http://goo.gl/7fxvVf
-    public Page<StudyPlan> getAllStudyPlans(Integer page, Integer size) {
-        Page pageOfStudyPlans = studyPlanRepository.findAll(new PageRequest(page, size));
-        // example of adding to the /metrics
-        if (size > 50) {
-            counterService.increment("advisorapp.StudyPlanService.getAll.largePayload");
-        }
-        return pageOfStudyPlans;
     }
 }

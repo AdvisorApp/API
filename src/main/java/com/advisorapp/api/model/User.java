@@ -4,16 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.Email;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(
         name = "users",
         uniqueConstraints={@UniqueConstraint(columnNames = "email")})
 public class User {
-
     @Id
     @GeneratedValue
     private long id;
@@ -24,7 +21,7 @@ public class User {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Column(name = "birthday", nullable = false)
+    @Column(name = "birthday", nullable = true)
     private Date birthday;
 
     @Column(name = "remote_id", unique = true)
@@ -39,11 +36,16 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnore
+    @OrderBy("name ASC")
     private Set<StudyPlan> studyPlans;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OrderBy("uv ASC")
+    private Set<UvUser> uvUsers;
 
     public User()
     {
-        this.studyPlans = new HashSet<>();
+        this.studyPlans = new HashSet<StudyPlan>();
     }
 
     public long getId() {
@@ -123,10 +125,7 @@ public class User {
 
     public User setStudyPlans(Set<StudyPlan> studyPlans) {
         this.studyPlans = studyPlans;
-        for (StudyPlan studyPlan :  studyPlans)
-        {
-            studyPlan.setUser(this);
-        }
+        studyPlans.forEach(e -> e.setUser(this));
 
         return this;
     }
