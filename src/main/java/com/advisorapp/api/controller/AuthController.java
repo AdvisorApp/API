@@ -1,5 +1,6 @@
 package com.advisorapp.api.controller;
 
+import com.advisorapp.api.exception.UnmakableRequestException;
 import com.advisorapp.api.model.Credential;
 import com.advisorapp.api.model.JsonWebToken;
 import com.advisorapp.api.SecuredRequest;
@@ -67,10 +68,10 @@ public class AuthController extends AbstractRestHandler {
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "SignUp", notes = "Sign Up a user")
     public void signUp(@RequestBody User user,
-                HttpServletRequest request, HttpServletResponse response) {
-//        if (this.userService.getUserRepository().findByEmail(user.getEmail())) {
-//
-//        }
+                HttpServletRequest request, HttpServletResponse response) throws UnmakableRequestException {
+        if (this.userService.getUserRepository().findByEmail(user.getEmail()) != null) {
+            throw new UnmakableRequestException("The email already exists");
+        }
         userService.signUp(user);
     }
 
