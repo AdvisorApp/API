@@ -24,18 +24,18 @@ public class FixturingDatabase {
         this.references.put("UV_TYPE", new HashMap<>());
     }
 
-    public void run() {
+    public boolean run() {
         if (this.tankFactory.getUserFactory().getUserService().getUserRepository().findAll().size() > 0) {
-            System.out.println("TRYING TO DO A REMOVE ");
-            this.destroyDatabase();
+            return false;
         }
 
-        //INIT UVS
-        //this.initUvType();
-        //this.initUV();
-//
-        //this.tankFactory.getStudyPlanFactory().createDefaultStudyPlanForUser(null);
-        //this.initUser();
+       // INIT UVS
+        this.initUvType();
+        this.initUV();
+
+        this.tankFactory.getStudyPlanFactory().createDefaultStudyPlanForUser(null);
+        this.initUser();
+        return true;
     }
 
     private void initUser() {
