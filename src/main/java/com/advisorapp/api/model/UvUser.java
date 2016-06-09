@@ -27,6 +27,7 @@ public class UvUser {
     @Column(name = "uv_mark")
     private double uvMark;
 
+    @Lob
     @Column(name = "uv_comment")
     private String uvComment;
 
