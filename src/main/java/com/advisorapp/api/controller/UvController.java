@@ -1,8 +1,10 @@
 package com.advisorapp.api.controller;
 
 import com.advisorapp.api.factory.UvFactory;
+import com.advisorapp.api.factory.UvUserFactory;
 import com.advisorapp.api.model.Uv;
 import com.advisorapp.api.exception.DataFormatException;
+import com.advisorapp.api.model.UvUser;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -22,6 +24,9 @@ import java.util.Set;
 public class UvController extends AbstractRestHandler {
     @Autowired
     private UvFactory uvFactory;
+
+    @Autowired
+    private UvUserFactory uvUserFactory;
 
     @RequestMapping(value = "",
             method = RequestMethod.POST,
@@ -109,6 +114,24 @@ public class UvController extends AbstractRestHandler {
         Uv concernedUV = this.uvFactory.getUvService().getUv(id);
         checkResourceFound(concernedUV);
         return concernedUV.getRealCorequisites();
+    }
+
+    @RequestMapping(value = "/{id}/uvUsers",
+            method = RequestMethod.GET,
+            produces = "application/json")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get UV's uvUser")
+    public
+    @ResponseBody
+    Set<UvUser> getUvUserByUv(@ApiParam(value = "The Id of the existing ub", required = true)
+                              @PathVariable("id") Long id,
+                              HttpServletRequest request,
+                              HttpServletResponse response
+                              ) {
+        Uv concernedUv = this.uvFactory.getUvService().getUv(id);
+        checkResourceFound(concernedUv);
+
+        return this.uvUserFactory.getUvUserService().getUvUserByUV(concernedUv);
     }
 
 }

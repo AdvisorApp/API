@@ -47,8 +47,7 @@ public class UserService {
     }
 
     public User getUser(long id) {
-        User one = userRepository.findOne(id);
-        return one;
+        return userRepository.findOne(id);
     }
 
     public void updateUser(User user) {
