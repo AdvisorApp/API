@@ -1,6 +1,7 @@
 package com.advisorapp.api.controller;
 
 import com.advisorapp.api.SecuredRequest;
+import com.advisorapp.api.exception.UnmakableRequestException;
 import com.advisorapp.api.factory.SemesterFactory;
 import com.advisorapp.api.factory.UvFactory;
 import com.advisorapp.api.model.Semester;
@@ -123,7 +124,7 @@ public class SemesterController extends AbstractRestHandler {
             return errors;
         }
 
-        throw new IllegalArgumentException(errors.stream().reduce("", (acc, el) -> acc + el.toString() + "//"));
+        throw new UnmakableRequestException(errors.stream().reduce("", (acc, el) -> acc + el.toString() + "//"));
     }
 
     @RequestMapping(value = "/{semester_id}/uv/{uv_id}",
