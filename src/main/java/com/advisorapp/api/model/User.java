@@ -32,6 +32,7 @@ public class User {
     private String email;
 
     @Column(name = "password", nullable = false, length = 60)
+    @JsonIgnore
     private String password;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
