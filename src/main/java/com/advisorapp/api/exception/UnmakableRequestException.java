@@ -1,7 +1,7 @@
 package com.advisorapp.api.exception;
 
 /**
- * For HTTP 404 errors
+ * For HTTP 403 errors
  */
 public class UnmakableRequestException extends RuntimeException {
     public UnmakableRequestException() {
