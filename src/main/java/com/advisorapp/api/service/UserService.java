@@ -48,8 +48,6 @@ public class UserService {
 
     public User getUser(long id) {
         User one = userRepository.findOne(id);
-        // This is important to prevent passwords to leave server
-        one.setPassword(""); // TODO improve this
         return one;
     }
 
@@ -81,15 +79,11 @@ public class UserService {
                         credential.getEmail(),
                         authenticationService.hashPassword(credential.getPassword())
                 )
-        ).map(user ->{
-            user.setPassword("");
-            return user;
-        });
+        );
     }
 
     public User findById(long id) {
         User userById = userRepository.findUserById(id);
-        userById.setPassword("");
         return userById;
     }
 }
