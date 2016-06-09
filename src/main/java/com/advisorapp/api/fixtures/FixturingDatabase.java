@@ -40,51 +40,13 @@ public class FixturingDatabase {
 
     private void initUser() {
         this.tankFactory.getStudyPlanFactory().createDefaultStudyPlanForUser(this.tankFactory.getUserFactory().createUser(
-                "Safou",
-                "Foufou",
-                "sa@fou.com",
+                "Demo",
+                "Demo",
+                "demo@demo.com",
                 new Date(),
-                "Bgette44",
-                "Bgette44"
+                "demo",
+                "demo"
         ));
-    }
-
-    protected void destroyDatabase() {
-        this.tankFactory
-                .getUvUserFactory()
-                .getUvUserService()
-                .getUvUserRepository()
-                .findAll()
-                .forEach(e -> this.tankFactory.getUvUserFactory().getUvUserService().deleteUvUser(e.getId()));
-
-        this.tankFactory
-                .getSemesterFactory()
-                .getSemesterService()
-                .getSemesterRepository()
-                .findAll()
-                .forEach(e -> this.tankFactory.getSemesterFactory().getSemesterService().deleteSemester(e.getId()));
-
-        this.tankFactory
-                .getStudyPlanFactory()
-                .getStudyPlanService()
-                .getStudyPlanRepository()
-                .findAll()
-                .forEach(e -> this.tankFactory.getStudyPlanFactory().getStudyPlanService().deleteStudyPlan(e.getId()));
-
-        this.tankFactory
-                .getUserFactory()
-                .getUserService()
-                .getUserRepository()
-                .findAll()
-                .stream()
-                .forEach(e -> this.tankFactory.getUserFactory().getUserService().deleteUser(e.getId()));
-
-        this.tankFactory
-                .getUvTypeFactory()
-                .getUvTypeService()
-                .getAllUvTypes()
-                .forEach(e -> this.tankFactory.getUvTypeFactory().getUvTypeService().delete(e.getId()));
-
     }
 
     protected void initUvType() {

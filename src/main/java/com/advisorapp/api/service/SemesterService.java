@@ -54,7 +54,7 @@ public class SemesterService {
 
         this.updateSemester(semester.addUv(uv));
 
-        if (semester.getTotalChs() > 18 || semester.getTotalChs() < 12)
+        if (semester.getTotalChs() > 18)
         {
             errors.add("The number of CHS of the semester is not valid");
         }
